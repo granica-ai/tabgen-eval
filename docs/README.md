@@ -3,6 +3,7 @@
 `source/` is the public Sphinx site. Its navigation and search contain only
 curated user guides, metric pages, statistical methodology and API reference.
 Build it with the [local documentation workflow](building.md).
+Package releases use the [PyPI publishing workflow](releasing.md).
 
 Repository guides (`architecture.md`, `usage.md`, `methodology.md`,
 `failure-modes.md`) retain engineering and maintenance context. They are outside

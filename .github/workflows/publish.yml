@@ -1,0 +1,132 @@
+name: Publish to PyPI
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/publish.yml
+      - pyproject.toml
+      - README.md
+      - LICENSE
+      - src/**
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/publish.yml
+      - pyproject.toml
+      - README.md
+      - LICENSE
+      - src/**
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pypi-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and validate distributions
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Check release tag matches package version
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          version = tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]
+          expected = f"v{version}"
+          if os.environ["RELEASE_TAG"] != expected:
+              raise SystemExit(f"Release tag must be {expected}")
+          PY
+      - name: Install build tools
+        run: python -m pip install --upgrade build twine
+      - name: Build wheel and source distribution
+        run: python -m build
+      - name: Validate package metadata
+        run: python -m twine check --strict dist/*
+      - name: Check packaged native sources and generated-file exclusions
+        run: |
+          python - <<'PY'
+          import tarfile
+          import zipfile
+          from pathlib import Path
+
+          wheels = list(Path("dist").glob("*.whl"))
+          sdists = list(Path("dist").glob("*.tar.gz"))
+          assert len(wheels) == len(sdists) == 1, "Expected one wheel and one sdist"
+          sources = {
+              path.as_posix()
+              for path in Path("src/tabgen_eval/execution/csrc").rglob("*")
+              if path.suffix in {".cpp", ".cu", ".h", ".hpp", ".cuh", ".inc"}
+          }
+          assert sources, "No native sources found"
+          with zipfile.ZipFile(wheels[0]) as archive:
+              wheel_files = set(archive.namelist())
+          with tarfile.open(sdists[0]) as archive:
+              sdist_files = {
+                  name.split("/", 1)[1]
+                  for name in archive.getnames()
+                  if "/" in name
+              }
+          assert sources <= sdist_files, "Native sources missing from sdist"
+          assert {name.removeprefix("src/") for name in sources} <= wheel_files, (
+              "Native sources missing from wheel"
+          )
+          generated = ("docs/_build/", "docs/_generated/", "docs/source/_generated/")
+          for files in (wheel_files, sdist_files):
+              assert not any(name.startswith(generated) for name in files), (
+                  "Generated documentation must not be packaged"
+              )
+          print(f"Verified {len(sources)} native source files in both distributions")
+          PY
+      - name: Check wheel installs in an isolated environment
+        run: |
+          python -m venv "$RUNNER_TEMP/package-install"
+          "$RUNNER_TEMP/package-install/bin/python" -m pip install --no-deps dist/*.whl
+          "$RUNNER_TEMP/package-install/bin/python" -I - <<'PY'
+          from importlib.metadata import distribution
+
+          package = distribution("tabgen-eval")
+          assert package.locate_file("tabgen_eval/__init__.py").is_file()
+          print(f"Installed {package.metadata['Name']} {package.version}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-distributions
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: Publish release to PyPI
+    if: github.event_name == 'release' && github.repository == 'granica-ai/tabgen-eval'
+    needs: build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/project/tabgen-eval/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distributions
+          path: dist/
+      - name: Publish distributions with Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
