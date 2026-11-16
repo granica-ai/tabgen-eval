@@ -66,7 +66,10 @@ def test_structure_and_schema_differences_are_reported_instead_of_rejected():
     assert report.structure["missing_columns"] == ["old"]
     assert report.structure["unexpected_columns"] == ["extra"]
     assert report.structure["column_order_matches"] is False
-    assert report.structure["dtype_mismatches"]["x"] == {"train": "float64", "generated": "object"}
+    assert report.structure["dtype_mismatches"]["x"] == {
+        "train": str(train["x"].dtype),
+        "generated": str(generated["x"].dtype),
+    }
     assert report.inputs["generated"]["missing_schema_columns"] == ["old"]
     assert report.inputs["generated"]["undeclared_columns"] == ["extra"]
     assert report.numeric_support["x"]["n_generated_non_numeric"] == 1

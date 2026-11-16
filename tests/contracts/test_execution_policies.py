@@ -83,10 +83,14 @@ def test_fp32_configuration_runs_actual_cpu_fits(metric, task, per_metric, monke
     assert resolved.device == "cpu" and resolved.dtype == "float32"
     if metric == "mle":
         report = evaluate(frames[0], frames[2], schema, metrics=[resolved], options=cfg)
-        assert len(observed) == 6  # two point fits and two fits per bootstrap
+        assert len(observed) == 2 * cfg["n_replicates"]
+        diagnostics = report.provenance["utility_diagnostics"][metric]
+        assert not diagnostics["point"]
+        assert len(diagnostics["replicates"]) == cfg["n_replicates"]
     else:
         report = evaluate(frames[0], frames[2], schema, metrics=[resolved], options=cfg)
-        assert len(observed) == 18  # two points and two paired repetitions, three folds each
+        assert len(observed) == 2 * cfg["n_replicates"] * resolved.cv_folds
+        assert not report.provenance["classifier_diagnostics"][metric]["point"]
     assert np.isfinite(report[f"{metric}/" + ("ratio" if metric == "mle" else "auc")].value)
     execution = report.provenance["metric_execution"][metric]
     assert execution["implementation"] == "xgboost"

@@ -126,9 +126,14 @@ def test_all_missing_regression_targets_stay_unavailable_without_fitting(xgb, mo
         assert stat.generated_distribution.unavailable_count == 2
     assert report["mle/score"].n_eff == 0
     assert "INSUFFICIENT_DATA" in report["mle/score"].flag_codes
-    point = report.results[0].diagnostics["point"]
-    assert point["reason"] == "insufficient eligible sampled rows"
-    assert point["diagnostics"] == {"insufficient_data": True}
+    diagnostics = report.results[0].diagnostics
+    assert not diagnostics["point"]
+    assert len(diagnostics["replicates"]) == 2
+    for repeated in diagnostics["replicates"]:
+        assert repeated["reason"] == "insufficient eligible sampled rows"
+        assert repeated["diagnostics"] == {"insufficient_data": True}
+    assert np.isnan(report["mle/score"].ideal)
+    assert report["mle/score"].reference_distribution.unavailable_count == 2
     pools = report.results[0].diagnostics["row_usage"]["pools"]
     for role in ("test", "generated"):
         assert pools[role] == {

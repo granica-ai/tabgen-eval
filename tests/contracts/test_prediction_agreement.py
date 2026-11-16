@@ -104,19 +104,18 @@ def test_uncertainty_reuses_existing_model_fits(task, monkeypatch):
     original_fit, original_predict = XGBoostModel.fit, XGBoostModel.predict
 
     def fit(self, *args, **kwargs):
-        fits.append(id(self))
+        fits.append(self)
         return original_fit(self, *args, **kwargs)
 
     def predict(self, test, **kwargs):
         result = original_predict(self, test, **kwargs)
-        outputs.append(result.copy())
+        outputs.append((id(self), result.copy()))
         return result
 
     monkeypatch.setattr(XGBoostModel, "fit", fit)
     monkeypatch.setattr(XGBoostModel, "predict", predict)
     active = "prediction_agreement" if task == "classification" else "prediction_mse"
-    points = []
-    for mode, expected_fits in [("none", 2), ("reference", 4), ("both", 6)]:
+    for mode, expected_fits in [("none", 2), ("reference", 3), ("both", 4)]:
         outputs.clear()
         fits.clear()
         report = evaluate(
@@ -127,31 +126,38 @@ def test_uncertainty_reuses_existing_model_fits(task, monkeypatch):
             options=make_options(seed=17, uncertainty=mode, n_replicates=2),
         )
         assert len(fits) == expected_fits
-        assert len(outputs) == (2 if mode == "none" else 6)
+        assert len({id(model) for model in fits}) == expected_fits
+        assert len(outputs) == (2 if mode == "none" else 4)
         stat = report[f"mle/{active}"]
         n_res = 80 if mode == "both" else 160
         assert stat.n_eff == n_res
-        assert all(len(prediction) == n_res for prediction in outputs)
-        expected_point = (
-            np.mean(np.argmax(outputs[0], axis=1) == np.argmax(outputs[1], axis=1))
+        predictions = [prediction for _, prediction in outputs]
+        assert all(len(prediction) == n_res for prediction in predictions)
+        expected = [
+            np.mean(np.argmax(predictions[i], axis=1) == np.argmax(predictions[i + 1], axis=1))
             if task == "classification"
-            else np.mean((outputs[0] - outputs[1]) ** 2)
-        )
-        assert stat.value == pytest.approx(expected_point)
-        points.append(stat.value)
+            else np.mean((predictions[i] - predictions[i + 1]) ** 2)
+            for i in range(0, len(predictions), 2)
+        ]
+        assert stat.value == pytest.approx(np.mean(expected))
         assert stat.reference_distribution is None
         assert not hasattr(stat, "comparison")
         if mode != "none":
-            expected = [
-                np.mean(np.argmax(outputs[i], axis=1) == np.argmax(outputs[i + 1], axis=1))
-                if task == "classification"
-                else np.mean((outputs[i] - outputs[i + 1]) ** 2)
-                for i in [2, 4]
-            ]
+            assert stat.value_estimate == "mean"
             np.testing.assert_allclose(stat.generated_distribution.samples, expected)
+            np.testing.assert_allclose(
+                [stat.ci_low, stat.ci_high], np.quantile(expected, [0.025, 0.975])
+            )
+            diagnostics = report.results[0].diagnostics
+            assert not diagnostics["point"]
+            assert len(diagnostics["replicates"]) == 2
+            if mode == "reference":
+                assert outputs[0][0] == outputs[2][0]
+                assert outputs[1][0] != outputs[3][0]
+            else:
+                assert len({model_id for model_id, _ in outputs}) == 4
         else:
             assert stat.generated_distribution is None
-    assert points[0] == points[1]
 
 
 @pytest.mark.parametrize("task", ["classification", "regression"])

@@ -5,6 +5,7 @@ from __future__ import annotations
 import inspect
 import json
 
+import numpy as np
 import pytest
 
 from tabgen_eval import evaluate
@@ -193,8 +194,14 @@ def test_cli_mle_repetitions_export_raw_scores(tmp_path):
     assert score["direction"] == "lower_better"
     ratio = payload["results"]["utility"]["mle"]["ratio"]
     assert ratio["direction"] == "lower_better"
-    assert ratio["value"] == pytest.approx(score["value"] / score["ideal"])
-    assert len(score["generated_distribution"]["samples"]) == 2
-    assert len(score["reference_distribution"]["samples"]) == 2
+    generated_scores = np.asarray(score["generated_distribution"]["samples"])
+    reference_scores = np.asarray(score["reference_distribution"]["samples"])
+    assert len(generated_scores) == len(reference_scores) == 2
+    assert np.isfinite(generated_scores).all() and np.all(reference_scores > 0)
+    expected_ratios = generated_scores / reference_scores
+    np.testing.assert_allclose(ratio["generated_distribution"]["samples"], expected_ratios)
+    assert score["value"] == pytest.approx(np.mean(generated_scores))
+    assert score["ideal"] == pytest.approx(np.mean(reference_scores))
+    assert ratio["value"] == pytest.approx(np.mean(expected_ratios))
     assert "interval_method" not in score
     assert payload["provenance"]["metric_execution"]["mle"]["device"] == "cpu"

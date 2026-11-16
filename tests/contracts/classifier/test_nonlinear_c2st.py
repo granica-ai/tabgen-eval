@@ -179,36 +179,45 @@ def test_nonlinear_detector_catches_variance_shift_linear_misses(xgb):
     assert values[0] < 0.6 and values[1] > 0.8
 
 
-def test_xgboost_bootstrap_keeps_point_fixed_and_reports_matched_ideal(xgb):
+def test_xgboost_repetitions_report_means_and_matched_ideal_without_extra_points(xgb):
     real, fake, schema = variance_shift(n=360)
-    kwargs = dict(seed=20)
-    point = evaluate(
-        real,
-        fake,
-        schema,
-        metrics=["nonlinear_c2st"],
-        options=make_options(uncertainty="none", **kwargs),
-    )
     report = evaluate(
         real,
         fake,
         schema,
         metrics=["nonlinear_c2st"],
-        options=make_options(uncertainty="both", n_replicates=3, **kwargs),
+        options=make_options(uncertainty="both", n_replicates=3, seed=20),
     )
     stat = report["nonlinear_c2st/auc"]
-    assert stat.value == point["nonlinear_c2st/auc"].value
+    assert stat.value_estimate == stat.ideal_estimate == "mean"
     assert stat.n_eff == 180
-    assert stat.ci_low <= stat.ci_high
-    assert 0.5 <= stat.ideal <= 1.0
     diagnostics = report.provenance["classifier_diagnostics"]["nonlinear_c2st"]
-    for key, point_fit in diagnostics["point"].items():
-        assert point_fit["converged"] and point_fit["point"]
-        assert all(
-            f["training_rows"] + f["scoring_rows"] == 2 * stat.n_eff for f in point_fit["folds"]
-        )
+    assert not diagnostics["point"]
+    for key, distribution, value, low, high in (
+        ("generated", stat.generated_distribution, stat.value, stat.ci_low, stat.ci_high),
+        (
+            "real_reference",
+            stat.reference_distribution,
+            stat.ideal,
+            stat.ideal_ci_low,
+            stat.ideal_ci_high,
+        ),
+    ):
         fits = diagnostics["replicates"][key]
         assert len(fits) == 3 and all(fit["converged"] and fit["point"] for fit in fits)
+        assert all(len(fit["folds"]) == 3 for fit in fits)
+        np.testing.assert_array_equal([fit["raw_value"] for fit in fits], distribution.samples)
+        assert np.isfinite(distribution.samples).all()
+        assert value == pytest.approx(np.mean(distribution.samples), rel=0, abs=1e-15)
+        np.testing.assert_allclose(
+            [low, high], np.quantile(distribution.samples, [0.025, 0.975]), rtol=0, atol=1e-15
+        )
+        assert 0.5 <= value <= 1.0
+        assert all(
+            fold["training_rows"] + fold["scoring_rows"] == 2 * stat.n_eff
+            for fit in fits
+            for fold in fit["folds"]
+        )
         assert {f["solver"] for fit in fits for f in fit["folds"]} == {"xgboost-hist"}
     assert json.loads(report.to_json())["provenance"]["classifier_diagnostics"] == {
         "nonlinear_c2st": diagnostics
@@ -241,11 +250,13 @@ def test_xgboost_worker_budgets_preserve_scores_and_bound_every_fit(xgb):
     )
     assert first.value == second.value
     diagnostics = reports[1].provenance["classifier_diagnostics"]["nonlinear_c2st"]
-    for key, point_fit in diagnostics["point"].items():
-        assert {f["fit_threads"] for f in point_fit["folds"]} == {2}
+    assert not diagnostics["point"]
+    for key in ("generated", "real_reference"):
         fits = diagnostics["replicates"][key]
+        assert len(fits) == 3
+        assert all(len(fit["folds"]) == 3 for fit in fits)
         assert {f["fit_threads"] for fit in fits for f in fit["folds"]} == {1}
-        for fold in point_fit["folds"] + [f for fit in fits for f in fit["folds"]]:
+        for fold in [f for fit in fits for f in fit["folds"]]:
             assert (
                 int(fold["model_config"]["learner"]["generic_param"]["nthread"])
                 == fold["fit_threads"]
@@ -288,14 +299,22 @@ def test_native_engine_failure_is_flagged_and_failed_bootstraps_are_excluded(xgb
     )
     stat = report["nonlinear_c2st/auc"]
     assert {"NAN_VALUE", "CLASSIFIER_NOT_CONVERGED", "NONFINITE_REPLICATES"} <= set(stat.flag_codes)
-    assert np.isnan(stat.generated_distribution.samples).all()
     diag = report.provenance["classifier_diagnostics"]["nonlinear_c2st"]
-    assert len(diag["replicates"]["generated"]) == 3
-    assert all(not fit["converged"] for fit in diag["replicates"]["generated"])
-    assert all(
-        f["reason"] == "xgboost_fit_failed" and f["error"] == "simulated engine failure"
-        for f in diag["point"]["generated"]["folds"]
-    )
+    assert not diag["point"]
+    for key, distribution in (
+        ("generated", stat.generated_distribution),
+        ("real_reference", stat.reference_distribution),
+    ):
+        assert np.isnan(distribution.samples).all()
+        assert distribution.finite_count == 0
+        fits = diag["replicates"][key]
+        assert len(fits) == 3 and all(not fit["converged"] for fit in fits)
+        assert all(len(fit["folds"]) == 3 for fit in fits)
+        assert all(
+            fold["reason"] == "xgboost_fit_failed" and fold["error"] == "simulated engine failure"
+            for fit in fits
+            for fold in fit["folds"]
+        )
 
 
 def test_missing_and_unknown_categories_and_constant_features_are_supported(xgb):

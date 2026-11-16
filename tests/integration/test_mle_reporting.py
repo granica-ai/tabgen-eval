@@ -56,18 +56,31 @@ def test_public_mle_exposes_raw_scores_and_ratios(predictive_data, mode):
     assert ratio.direction is score.direction
     assert ratio.display == f"MLE Ratio ({'MAE' if task == 'regression' else 'AUROC'})"
     assert score.value >= 0 and score.ideal > 0
-    assert ratio.value == pytest.approx(score.value / score.ideal)
-    if mode != "none":
-        np.testing.assert_allclose(
-            ratio.generated_distribution.samples,
-            score.generated_distribution.samples / score.reference_distribution.samples,
-        )
+    diagnostics = report.results[0].diagnostics
+    if mode == "none":
+        assert ratio.value == pytest.approx(score.value / score.ideal)
+        assert score.generated_distribution is score.reference_distribution is None
+        fits = [diagnostics["point"]]
+    else:
+        generated_scores = score.generated_distribution.samples
+        reference_scores = score.reference_distribution.samples
+        assert len(generated_scores) == len(reference_scores) == 2
+        assert np.isfinite(generated_scores).all() and np.all(reference_scores > 0)
+        expected_ratios = generated_scores / reference_scores
+        np.testing.assert_allclose(ratio.generated_distribution.samples, expected_ratios)
+        assert score.value == pytest.approx(np.mean(generated_scores))
+        assert score.ideal == pytest.approx(np.mean(reference_scores))
+        assert ratio.value == pytest.approx(np.mean(expected_ratios))
+        assert score.value_estimate == score.ideal_estimate == ratio.value_estimate == "mean"
+        assert not diagnostics["point"]
+        fits = diagnostics["replicates"]
+        assert len(fits) == 2
     exported = json.loads(report.to_json())["results"]["utility"]["mle"]
     for name in ("score", "ratio"):
         assert exported[name]["direction"] == score.direction.value
-    point = report.results[0].diagnostics["point"]
-    assert point["diagnostics"]["scoring"] == ("mae" if task == "regression" else "auroc")
-    assert "generated_skill" not in point and "reference_skill" not in point
+    for fit in fits:
+        assert fit["diagnostics"]["scoring"] == ("mae" if task == "regression" else "auroc")
+        assert "generated_skill" not in fit and "reference_skill" not in fit
 
 
 @pytest.mark.parametrize("mode", ["none", "reference", "both"])
@@ -86,8 +99,15 @@ def test_test_only_mle_retains_raw_score_direction(predictive_data, mode):
     if mode == "none":
         assert np.isfinite(score.value) and score.value >= 0
     else:
-        assert score.point_status == "absent"
+        assert score.point_status is None
+        assert score.value_estimate == "mean"
         assert score.reference_distribution.requested_count == 2
-        assert np.all(score.reference_distribution.samples >= 0)
+        samples = score.reference_distribution.samples
+        assert np.isfinite(samples).all() and np.all(samples >= 0)
+        assert score.value == pytest.approx(np.mean(samples))
+        np.testing.assert_allclose(
+            [score.ideal_ci_low, score.ideal_ci_high], np.quantile(samples, [0.025, 0.975])
+        )
+    assert np.isnan(score.ideal) and score.ideal_status == "absent"
     exported = json.loads(report.to_json())["results"]["utility"]["mle"]["score"]
     assert exported["direction"] == score.direction.value
