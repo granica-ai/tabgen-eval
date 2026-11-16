@@ -1,7 +1,7 @@
 # TabGenEval
 
 <p align="center">
-  <img src="docs/source/_static/holmes-inspecting-tables.png" alt="Holmes inspecting tables" width="640">
+  <img src="https://raw.githubusercontent.com/granica-ai/tabgen-eval/main/docs/source/_static/holmes-inspecting-tables.png" alt="Holmes inspecting tables" width="640">
 </p>
 
 TabGenEval is a comprehensive, high-performance evaluation framework for synthetic tabular data, using real data as the reference. It evaluates tabular generative models across three core pillars: Fidelity, Memorization, and Utility.
@@ -14,26 +14,35 @@ TabGenEval is the newer version of [LTM-Eval](https://github.com/granica-ai/ltm-
 
 | Pillar | Metrics | What they measure |
 | --- | --- | --- |
-| Fidelity | [Shape](docs/source/metrics/fidelity/shape.md), [Trend](docs/source/metrics/fidelity/trend.md) | Individual column distributions and relationships between columns |
-| Fidelity | [Conditional Shape, Conditional Trend, Recovery](docs/source/metrics/fidelity/conditional.md) | Fidelity and representation within subpopulations |
-| Fidelity | [Precision, Recall, Density, Coverage (PRDC)](docs/source/metrics/geometric-fidelity/prdc.md) | Local geometric structure |
-| Fidelity | [Linear C2ST](docs/source/metrics/detection/linear-c2st.md), [Nonlinear C2ST](docs/source/metrics/detection/nonlinear-c2st.md) | How well classifiers can distinguish synthetic from real data |
-| Fidelity | [Concentration](docs/source/metrics/concentration.md) | Over-concentration of synthetic records |
-| Memorization | [DCR Ratio](docs/source/metrics/memorization/dcr.md), [Near-match Rate](docs/source/metrics/memorization/near-match-rate.md), [Replication Ratio](docs/source/metrics/memorization/replication-ratio.md) | Proximity to and reproduction of training records |
-| Utility | [MLE, including prediction agreement](docs/source/metrics/utility/mle.md) | Predictive performance and agreement of models trained on synthetic versus real data |
+| Fidelity | [Shape](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/fidelity/shape.md), [Trend](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/fidelity/trend.md) | Individual column distributions and relationships between columns |
+| Fidelity | [Conditional Shape, Conditional Trend, Recovery](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/fidelity/conditional.md) | Fidelity and representation within subpopulations |
+| Fidelity | [Precision, Recall, Density, Coverage (PRDC)](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/geometric-fidelity/prdc.md) | Local geometric structure |
+| Fidelity | [Linear C2ST](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/detection/linear-c2st.md), [Nonlinear C2ST](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/detection/nonlinear-c2st.md) | How well classifiers can distinguish synthetic from real data |
+| Fidelity | [Concentration](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/concentration.md) | Over-concentration of synthetic records |
+| Memorization | [DCR Ratio](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/memorization/dcr.md), [Near-match Rate](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/memorization/near-match-rate.md), [Replication Ratio](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/memorization/replication-ratio.md) | Proximity to and reproduction of training records |
+| Utility | [MLE, including prediction agreement](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/utility/mle.md) | Predictive performance and agreement of models trained on synthetic versus real data |
 
 **Fast evaluation on CPU and GPU.** Across evaluation metrics, TabGenEval's optimized CPU and GPU implementations achieve average speedups of **33.4× and 90.8×**, respectively, compared to equivalent Python CPU implementations.
 
 ## Install
-Clone TabGenEval repository and install the repository
-```bash
-git clone https://github.com/granica-ai/tabgen-eval.git
-cd tabgen-eval
-pip install .  # CPU support
 
-# pip install '.[cuda,xgboost-cuda]'  # GPU support
+Requires Python 3.10 or later. Install from PyPI:
+
+```bash
+pip install tabgen-eval
 ```
-**Note:** CPU execution requires a properly configured C++17-compatible compiler (C++20 for PyTorch ≥ 2.12) and OpenMP support. See the [installation guide](docs/source/getting-started/installation.md) for setup instructions. Additional dependencies are specified in `pyproject.toml`.
+
+For GPU support on Linux:
+
+```bash
+pip install "tabgen-eval[cuda,xgboost-cuda]"
+```
+
+Supported platforms are Linux (CPU and GPU) and Apple Silicon macOS (CPU only).
+Native CPU operators compile on first use and require a C++17-compatible compiler
+(C++20 for PyTorch ≥ 2.12) and OpenMP support. See the
+[installation guide](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/getting-started/installation.md)
+for compiler setup and source installation instructions.
 
 ## Quick Start
 
@@ -90,7 +99,7 @@ report.fidelity.plot(kind="columns", metric="shape").write_html("columns.html")
 report.utility.plot(kind="utility").write_html("utility.html")
 ```
 
-For more details on available metrics, uncertainty quantification options, and visualization capabilities, please refer to the [documentation](docs/source/metrics/index.md).
+For more details on available metrics, uncertainty quantification options, and visualization capabilities, please refer to the [documentation](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/index.md).
 
 
 ## Citation
