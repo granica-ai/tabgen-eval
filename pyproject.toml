@@ -28,6 +28,7 @@ dependencies = [
     "psutil>=5.9",  # portable available-memory observations for automatic planning
     "xgboost>=2.1",  # predictive utility and nonlinear C2ST
     "torch>=2.6",  # default tensor frontend; native binary wheels pin their Torch build
+    "setuptools>=70",  # torch.utils.cpp_extension imports it for CPU source builds
 ]
 
 [project.optional-dependencies]
