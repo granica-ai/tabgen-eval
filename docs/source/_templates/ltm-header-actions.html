@@ -1,0 +1,10 @@
+<div class="ltm-header-actions">
+  {% include "components/theme-switcher.html" %}
+  <a class="ltm-header-company" href="https://www.granica.ai/">Granica</a>
+  <form class="ltm-header-search" action="{{ pathto('search') }}" method="get" role="search" aria-label="Documentation search">
+    <input type="search" name="q" placeholder="Search documentation" aria-label="Search documentation">
+    <button type="submit" aria-label="Search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+    </button>
+  </form>
+</div>

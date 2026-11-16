@@ -1,0 +1,4722 @@
+{
+  "recorded_date": "2026-10-22",
+  "source_revision": "613a650307dcf93b9451461d8ca407588025606a",
+  "source_timings_sha256": "457ea9405c8b657eee6ef566a129a1acec6c0112456c71e097053492322e04b4",
+  "hardware": {
+    "cpu": "AMD EPYC 9554 64-Core Processor",
+    "cpu_threads_per_worker": 8,
+    "gpu": "NVIDIA A100 80GB PCIe"
+  },
+  "precision": "float64",
+  "seed": 42,
+  "n_jobs": 8,
+  "uncertainty": null,
+  "timing_scope": "One completed public evaluate call per dataset/source/computation/configuration, including preparation, transfer, fitting and scoring. Imports, file loading and synthetic warmup excluded. Remaining first-use work inside evaluate is included.",
+  "environment_note": "Shared host with concurrent independent workers and existing caches. These are original-pass observations, not a repeated-trial estimate or isolated-machine benchmark. Interrupted attempts were restarted; only completed call durations are included.",
+  "aggregation": "Arithmetic mean across five datasets, four sample sources and eleven unique computation groups: 220 equally weighted calls per configuration. Shared outputs count once. This is a mean per computation, not the latency of a combined all-metrics call.",
+  "datasets": [
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "train_rows": 55028,
+      "test_and_generated_rows": 6878,
+      "columns": 20
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "train_rows": 65134,
+      "test_and_generated_rows": 8142,
+      "columns": 32
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "train_rows": 150653,
+      "test_and_generated_rows": 18832,
+      "columns": 131
+    },
+    {
+      "dataset": "covertype",
+      "train_rows": 410100,
+      "test_and_generated_rows": 51262,
+      "columns": 15
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "train_rows": 1000000,
+      "test_and_generated_rows": 125000,
+      "columns": 5
+    }
+  ],
+  "sample_sources": [
+    "test_split",
+    "ours_15h",
+    "tabdiff_15h",
+    "ltm_step378000"
+  ],
+  "computation_groups": {
+    "shape": [
+      "shape"
+    ],
+    "trend": [
+      "trend"
+    ],
+    "prdc": [
+      "precision",
+      "recall",
+      "density",
+      "coverage"
+    ],
+    "conditional_fidelity": [
+      "cond_shape",
+      "cond_trend",
+      "recovery"
+    ],
+    "concentration": [
+      "concentration"
+    ],
+    "linear_c2st": [
+      "linear_c2st"
+    ],
+    "nonlinear_c2st": [
+      "nonlinear_c2st"
+    ],
+    "dcr": [
+      "dcr_ratio"
+    ],
+    "near_match_rate": [
+      "near_match_rate"
+    ],
+    "replication_ratio": [
+      "replication_ratio"
+    ],
+    "mle": [
+      "mle"
+    ]
+  },
+  "configurations": {
+    "python_cpu": "Python CPU",
+    "torch_cpu": "Optimized CPU",
+    "cuda": "GPU"
+  },
+  "records": [
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.580191358923912
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 36.368981489911675
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 2.081817204132676
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 11.600142015144229
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 417.2583649288863
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 11.34904863499105
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 3.956970203667879
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 2001.9920648522675
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 64.51795296184719
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.8437370602041483
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 473.098793881014
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 4.111786277964711
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.756822470575571
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 1.8427081108093262
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.812147045508027
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 3.695270571857691
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 1112.909251106903
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 35.472945757210255
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 7.722741207107902
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.7275540716946125
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.6223951503634453
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 3.4148551616817713
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 214.98162217251956
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 11.761643378064036
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 4.119660846889019
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 990.3403974622488
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 32.03578571230173
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.42711361683905125
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.5209218971431255
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.46443859301507473
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 3.094352461397648
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 96.51194141618907
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.5896472651511431
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.6123932767659426
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 35.99213741719723
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 2.0925090964883566
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 12.916992980986834
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 421.1738704238087
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 11.279530739411712
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 4.281310435384512
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 1982.3206567633897
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 73.67764206416905
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.035738056525588
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 557.3940590359271
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 4.067542737349868
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 6.4307191632688046
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 1.7483631800860167
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.8259644974023104
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 3.902539065107703
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 1004.9800529498607
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 41.95565905421972
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 6.775156544521451
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.7213521022349596
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.630224583670497
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 3.6708748769015074
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 187.5790824200958
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 10.306698163971305
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 3.0990724451839924
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 986.060500504449
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 39.08722998201847
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.2362371031194925
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.5100126247853041
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.45503798872232437
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 9.2479217518121
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 96.58757853135467
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.5686760172247887
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.6127256583422422
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 36.12093927524984
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 1.7034971565008163
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 5.645579596981406
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 427.0107523370534
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 11.160798724740744
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 3.934464782476425
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 2014.3415448646992
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 74.49906959943473
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 1.0590528193861246
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 511.03008593432605
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 4.22425027564168
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.789843490347266
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 1.7588102035224438
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.7292759716510773
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 3.6208314560353756
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 983.0747531615198
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 37.40480266325176
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 6.4325428158044815
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.69876360706985
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.6091216895729303
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.6764787547290325
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 189.52179089561105
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 11.414412841200829
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 3.6184407249093056
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 1039.8558588214219
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 42.466023467481136
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 3.0279139913618565
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.5050479453057051
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.44481238536536694
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.5775778964161873
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 101.57982975058258
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.5563745684921741
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.5205320362001657
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 17.974604845046997
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 1.2599923480302095
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 11.210384460166097
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 207.97634449973702
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 5.466301841661334
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 7.4253415036946535
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 982.4148503486067
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 40.02375753596425
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 5.085532898083329
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 161.93403535708785
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 3.0592882111668587
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.295531243085861
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.9724916070699692
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.9389586839824915
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 3.569745371118188
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 507.7492680102587
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 18.930178198963404
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.733751345425844
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1.8998090866953135
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 1.8111233580857515
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 3.670300731435418
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 92.89350747130811
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 4.887383999302983
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 3.0771126467734575
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 497.0603068564087
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 13.144766950979829
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.1205289885401726
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.2535423394292593
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.22081797569990158
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 9.236981870606542
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 48.74746456742287
+    },
+    {
+      "dataset": "allstate_claims_severity",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.27711707167327404
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.09876607358455658
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 31.286478705704212
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 1.4185146279633045
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 0.34696654230356216
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 6.238346330821514
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.2561843879520893
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 3.6611494217067957
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 705.3643640186638
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 27.73869219981134
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.13300319574773312
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 15.379007628187537
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.6149438563734293
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.654304500669241
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 2.048353672027588
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 2.0541537031531334
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.7451750133186579
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 464.3088009208441
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 14.412169760093093
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 6.736304437741637
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1.4515552874654531
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 1.4121727477759123
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 1.0290425196290016
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 58.16845740377903
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 6.422309767454863
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.7460483219474554
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 460.81820491328835
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 14.698838179931045
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.06341392360627651
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.15986560471355915
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.07788199372589588
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.11322209239006042
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 1.8176387716084719
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.1300750970840454
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.256177444010973
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 33.45843780785799
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 1.412349259480834
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 6.922807374969125
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 6.17852964438498
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.2574528343975544
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 3.1504074577242136
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 652.0142153277993
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 26.88266528956592
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 5.525817619636655
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 11.62792133167386
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.6475089322775602
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.4898208305239677
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 2.024325620383024
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 2.0133920405060053
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.7279056925326586
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 335.730075603351
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 14.164540264755487
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 6.6668913047760725
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1.5277314968407154
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 1.4196911081671715
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 1.523156512528658
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 58.59607767127454
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 6.351732648909092
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.7396760396659374
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 339.5228169430047
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 13.950942745432258
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.951246341690421
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.13352571614086628
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.08024422451853752
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.10720179788768291
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 1.4768969602882862
+    },
+    {
+      "dataset": "covertype",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.1328230667859316
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.10586624220013618
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 33.31900574080646
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 1.422338955104351
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 0.3279564883559942
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 6.85237211547792
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.256675174459815
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 1.2184584867209196
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 665.7755964137614
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 26.939700739458203
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.16766864247620106
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 16.00547188334167
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.6375538613647223
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.614838246256113
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 2.0189949944615364
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 2.036015871912241
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.754672572016716
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 326.78830283135176
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 13.788869269192219
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.538468772545457
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1.4479693565517664
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 1.4274304900318384
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.37014107033610344
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 58.28159577399492
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 6.267408285290003
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.7598670329898596
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 328.5509010758251
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 14.757797285914421
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.07970566116273403
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.1344336662441492
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.07778648845851421
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.0978497564792633
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 1.440114539116621
+    },
+    {
+      "dataset": "covertype",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.13115501962602139
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.2901806943118572
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 15.724623952060938
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.9454282317310572
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 10.415513876825571
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 3.0739556830376387
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.13324714452028275
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 2.9777890536934137
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 341.99251028709114
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 14.560264829546213
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 8.072269208729267
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 4.0886051338166
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.16314322873950005
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 4.128830375149846
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.9980433657765388
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.0242010429501534
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.5354274399578571
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 165.90483051165938
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 7.600801471620798
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.754263963550329
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1.1130116768181324
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 1.0976037047803402
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 1.8318584337830544
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 28.831761004403234
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 3.171816887333989
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.548930486664176
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 175.2640243768692
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 6.911040171980858
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.26165303587913513
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.0658135674893856
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.03832384757697582
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 4.253111870959401
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.7879520896822214
+    },
+    {
+      "dataset": "covertype",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.06249328330159187
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.04940410889685154
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 1.7092336807399988
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.10636991634964943
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 3.2407169342041016
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 13.607153551653028
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.17977369762957096
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 2.5540430918335915
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 55.08762598596513
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 1.7230935487896204
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.126102264970541
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 19.90380548685789
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.7595940176397562
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 0.719910116866231
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.34002743288874626
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.33897868916392326
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.16769897751510143
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 27.44818684272468
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.8941771276295185
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.64671646989882
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.7264609299600124
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.7521685492247343
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.08717430010437965
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 12.637001123279333
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.34531654231250286
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.16986380144953728
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 27.86408227495849
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.8788613565266132
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.04110974818468094
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.061872268095612526
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.03881542384624481
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.0982494167983532
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 3.519054936245084
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.05646352469921112
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.20150752365589142
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 1.712853154167533
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.10312450490891933
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 7.0325856152921915
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 13.578824408352375
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.17589592933654785
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 0.4414964076131582
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 55.21444025821984
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 1.7321430761367083
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.180854797363281
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 20.143839256837964
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.7974047102034092
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.1143787279725075
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.32832407765090466
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.3349656369537115
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.16868330352008343
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 27.712096832692623
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.9528927616775036
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 5.471481034532189
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.711206840351224
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.740732392296195
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 3.399272946640849
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 11.45780485123396
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.3428508620709181
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.1680439803749323
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 27.4980728328228
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.9241381548345089
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.7391746416687965
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.06137233227491379
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.04314952343702316
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 4.254691673442721
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 3.5280076153576374
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.05582817643880844
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.04974639229476452
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 1.78706119582057
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.10330877266824245
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 3.570210626348853
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 14.585344346240163
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.17760834470391273
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 2.5668615382164717
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 64.78062666021287
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 1.7173416148871183
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.8126776162534952
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 24.714128164574504
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.7617766559123993
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 0.3464849591255188
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.34196507558226585
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.33227592147886753
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.18392054550349712
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 31.49255022779107
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.9059262406080961
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.701539473608136
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.7674663122743368
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.7497296426445246
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.07482139766216278
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 14.011661974713206
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.34189585596323013
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 2.8415993750095367
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 31.2552351038903
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.8479175847023726
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.04309632070362568
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.06836881302297115
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.0378151498734951
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.08152911625802517
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 4.120746996253729
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.056101540103554726
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.27312377840280533
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 0.8705395292490721
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.06852168403565884
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 7.108924277126789
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 7.234772460535169
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.08674176223576069
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 0.3739859741181135
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 30.553741788491607
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 0.9687271900475025
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.612582134082913
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 8.511074462905526
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.43089061602950096
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.3009855672717094
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.1670449636876583
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.16517324559390545
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.16832649894058704
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 15.22764921747148
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.5439468417316675
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 2.9502598345279694
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.43416668847203255
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.41582740284502506
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 2.731807416304946
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 5.797990730032325
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.16891209594905376
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.155996548011899
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 16.091220749542117
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.537191916257143
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.5596931744366884
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.031720107421278954
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.020811565220355988
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 4.364069061353803
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 2.060857968404889
+    },
+    {
+      "dataset": "hotel_booking_demand",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.028691180050373077
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.2040318250656128
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 81.1674873586744
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 5.36694566346705
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 0.2539485637098551
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 2.310030309483409
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.1940012238919735
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 4.89868987724185
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 2754.7705653551966
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 61.985146878287196
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.8750277832150459
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1246.8269065767527
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 3.4526314195245504
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.677097512409091
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 1.43271560408175
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.4400251489132643
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 1.6453124675899744
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 1403.9159020744264
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 45.27664706483483
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 9.777612080797553
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.7423236835747957
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.1624612119048834
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 1.9935804679989815
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 392.67226009070873
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 23.917479172348976
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 1.648675488308072
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 1377.6940580941737
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 44.805201379582286
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.11359616555273533
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.16270715557038784
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.12135443277657032
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.13370746932923794
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.5313028395175934
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.1479049976915121
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.44404127821326256
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 81.96705295145512
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 5.4816259033977985
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 4.691025298088789
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 2.425071597099304
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.20435324870049953
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 5.024273792281747
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 2735.553149033338
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 63.30397846363485
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.249379884451628
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1372.899867348373
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 3.443935412913561
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.735411297529936
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 1.435181688517332
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.455743147060275
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 1.6670276373624802
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 1471.0868720840663
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 45.24849277175963
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 6.798399006947875
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 3.4977145977318287
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.168582895770669
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 4.240756057202816
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 385.6625932287425
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 24.123474014922976
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 1.647931171581149
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 1477.1287541668862
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 46.48289426974952
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.8251030519604683
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.13916774652898312
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.12165985070168972
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 1.6605969332158566
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.5789008680731058
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.15134270675480366
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.20094116777181625
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 81.34099065884948
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 5.422598913311958
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 0.3038785755634308
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 2.0117706079035997
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.19612421467900276
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 5.137676170095801
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 2677.5391801726073
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 61.90655346214771
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.7932134009897709
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 1186.1381966453046
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 3.4890915639698505
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 3.887652724981308
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 1.4269602112472057
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 1.4261196292936802
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 1.6324494555592537
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 1770.2017662264407
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 45.742248909547925
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.785619739443064
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.1849891152232885
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.167656872421503
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 2.5907964445650578
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 380.5558008272201
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 23.724531900137663
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 1.655826710164547
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 1389.7160084918141
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 45.86695995926857
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.834485061466694
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.1547480020672083
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.12248657643795013
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.12827434949576855
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.5616296958178282
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.1514294669032097
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.343014732003212
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 41.68151816725731
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 3.554100029170513
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 7.795521214604378
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 1.1705216243863106
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.10125685296952724
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 4.305845629423857
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 1764.584779938683
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 16.564223427325487
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.0240807216614485
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 611.108667338267
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 1.0951951034367085
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 0.48460723645985126
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.7374347858130932
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.7256436087191105
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 3.987866682931781
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 925.7758751958609
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 8.423343148082495
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.3554370813071728
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.144810875877738
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 2.0555863343179226
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 4.18211206048727
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 205.34961018525064
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 12.731312012299895
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 3.3602813817560673
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 904.0606848560274
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 16.394735772162676
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 1.2010809239000082
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.07616061344742775
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.06211732514202595
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 2.9672328550368547
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.2864856831729412
+    },
+    {
+      "dataset": "mercari_price_suggestion",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.07539564184844494
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.03494296222925186
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 0.7700171526521444
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.050025591626763344
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 0.2819516621530056
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 5.408350417390466
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.07242722623050213
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 0.09773098863661289
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 17.507448218762875
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 0.7054116036742926
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.05402304418385029
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 3.447685657069087
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.3454189505428076
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 2.918665163218975
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.2350819744169712
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.23544605262577534
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.052071601152420044
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 8.60773404315114
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.3535714726895094
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.5726825185120106
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.6584091521799564
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.9035475626587868
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.03626245632767677
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 2.7919241953641176
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.14862029626965523
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.052545370534062386
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 8.569261271506548
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.3240066599100828
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.01969304122030735
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.0268180463463068
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.019354073330760002
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 2.587217850610614
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.6873561963438988
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ltm_step378000",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.03512567654252052
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.18285595625638962
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 0.7775573171675205
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.050473256036639214
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 11.47291261702776
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 5.137834692373872
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.07038684748113155
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 2.5584725942462683
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 17.08058052137494
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 0.6705203372985125
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.4617439843714237
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.140383856371045
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.24147087149322033
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 2.698102993890643
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.21695025265216827
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.21275648474693298
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.05650966428220272
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 8.614748537540436
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.35178190283477306
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.6957999765872955
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.630296416580677
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.6810454241931438
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.798293923959136
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 2.834113359451294
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.1356803085654974
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.052397577092051506
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 9.426187295466661
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.3179130759090185
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.46230629459023476
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.027549464255571365
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.02002233825623989
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 4.197255918756127
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.685587402433157
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "ours_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.03293989039957523
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.021383142098784447
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 0.7728961203247309
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.05163189582526684
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 0.661327188834548
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 5.2314197067171335
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.06812858022749424
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 0.08519721031188965
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 18.13176142051816
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 0.698326900601387
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 0.08396019786596298
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 2.178079329431057
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.2641389984637499
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 2.9262031000107527
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.22130371816456318
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.21176125667989254
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.07151170074939728
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 8.985935539007187
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.3677860237658024
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 4.140768080949783
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.6760285012423992
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.6583349034190178
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.03913068771362305
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 2.837686972692609
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.13303294777870178
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.07194336876273155
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 9.562801647931337
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.30819691717624664
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 0.01939515396952629
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.028070859611034393
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.017226099967956543
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 0.05678107962012291
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.7032759934663773
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "tabdiff_15h",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.029606271535158157
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "cuda",
+      "seconds": 0.27665856294333935
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "python_cpu",
+      "seconds": 0.3907501567155123
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "concentration",
+      "configuration": "torch_cpu",
+      "seconds": 0.03292402625083923
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "cuda",
+      "seconds": 11.825024977326393
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "python_cpu",
+      "seconds": 2.517745530232787
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "conditional_fidelity",
+      "configuration": "torch_cpu",
+      "seconds": 0.0357618760317564
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "cuda",
+      "seconds": 1.1838120203465223
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "python_cpu",
+      "seconds": 8.795316651463509
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "dcr",
+      "configuration": "torch_cpu",
+      "seconds": 0.36363063752651215
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.4417161159217358
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.6926097013056278
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "linear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.07807862386107445
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "cuda",
+      "seconds": 2.795639604330063
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "python_cpu",
+      "seconds": 0.11393540911376476
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "mle",
+      "configuration": "torch_cpu",
+      "seconds": 0.11565242893993855
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "cuda",
+      "seconds": 0.08618888072669506
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "python_cpu",
+      "seconds": 4.443830354139209
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "near_match_rate",
+      "configuration": "torch_cpu",
+      "seconds": 0.2022604625672102
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "cuda",
+      "seconds": 3.5981399677693844
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "python_cpu",
+      "seconds": 0.35634961165487766
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "nonlinear_c2st",
+      "configuration": "torch_cpu",
+      "seconds": 0.3470554854720831
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "cuda",
+      "seconds": 0.7311453875154257
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "python_cpu",
+      "seconds": 2.287794381380081
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "prdc",
+      "configuration": "torch_cpu",
+      "seconds": 0.06358345970511436
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "cuda",
+      "seconds": 0.057385148480534554
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "python_cpu",
+      "seconds": 4.677783684805036
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "replication_ratio",
+      "configuration": "torch_cpu",
+      "seconds": 0.1786221768707037
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "cuda",
+      "seconds": 2.414562340825796
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "python_cpu",
+      "seconds": 0.014363927766680717
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "shape",
+      "configuration": "torch_cpu",
+      "seconds": 0.01083344779908657
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "cuda",
+      "seconds": 1.22232367657125
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "python_cpu",
+      "seconds": 0.347036374732852
+    },
+    {
+      "dataset": "video_transcoding_time_prediction",
+      "sample": "test_split",
+      "computation": "trend",
+      "configuration": "torch_cpu",
+      "seconds": 0.016873564571142197
+    }
+  ]
+}

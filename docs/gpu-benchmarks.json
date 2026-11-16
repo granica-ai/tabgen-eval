@@ -1,0 +1,1464 @@
+{
+  "hardware": {
+    "GPU": "NVIDIA A100 SXM4 80GB",
+    "CPU": "Intel Xeon Platinum 8470"
+  },
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "CUDA": "13.0"
+  },
+  "precision": "Pure selected FP32/FP64 numerical kernels; no TF32, mixed precision or refinement; exact integer counts",
+  "measurement_scope": {
+    "prepared": "Includes draw gathering, fold preprocessing/fitting, reductions and scalar downloads; excludes initial shared source preparation, import and compilation/JIT",
+    "report": "Includes cleaning, source encoding, upload, point and ideal estimates and requested bootstrap refits; warmed imports/compiled kernels",
+    "input": "Synthetic 50% numeric / 50% categorical, cardinality 10 unless stated, identical source seeds and NumPy draws; 2 or 3 timed repeats, median",
+    "memory": "CUDA peak live extra allocations above persistent input buffers; excludes driver/framework allocations outside Torch allocator",
+    "high_cardinality_Conditional": "1000x100 profiles at 1024/15000 levels retain primarily numeric conditioning slices; rare categorical groups are filtered at min_count. Independent tests also exercise occupied global domains beyond 4096."
+  },
+  "distance_prepared_100000_by_100": {
+    "numeric": 50,
+    "categorical": 50,
+    "cardinality": 1024,
+    "B": 0,
+    "measurements": {
+      "float32": {
+        "prdc": {
+          "warm_s": 3.930454548448324,
+          "first_call_s": 5.358379079028964,
+          "peak_extra_MiB": 205.6279296875
+        },
+        "dcr": {
+          "warm_s": 1.2722284868359566,
+          "first_call_s": 1.2844723835587502,
+          "peak_extra_MiB": 247.19384765625
+        }
+      },
+      "float64": {
+        "prdc": {
+          "warm_s": 5.386525980196893,
+          "first_call_s": 6.761290494352579,
+          "peak_extra_MiB": 243.39208984375
+        },
+        "dcr": {
+          "warm_s": 1.5877010561525822,
+          "first_call_s": 1.6001529693603516,
+          "peak_extra_MiB": 319.78173828125
+        }
+      }
+    }
+  },
+  "distance_report_comparisons_against_Rust_jobs1": {
+    "numeric": 50,
+    "categorical": 50,
+    "cardinality": 1024,
+    "comparisons": [
+      {
+        "n_eff": 500,
+        "B": 0,
+        "metric": "prdc",
+        "rust_jobs1_s": 0.16184521466493607,
+        "gpu_fp64_s": 0.14329526759684086,
+        "speedup": 1.1294526147247599,
+        "max_statistic_difference": 0.0,
+        "max_replicate_difference": 0
+      },
+      {
+        "n_eff": 500,
+        "B": 0,
+        "metric": "dcr",
+        "rust_jobs1_s": 0.1560259312391281,
+        "gpu_fp64_s": 0.14738971181213856,
+        "speedup": 1.0585944522233492,
+        "max_statistic_difference": 2.5084112564854877e-09,
+        "max_replicate_difference": 0
+      },
+      {
+        "n_eff": 5000,
+        "B": 0,
+        "metric": "prdc",
+        "rust_jobs1_s": 3.7269091522321105,
+        "gpu_fp64_s": 0.6657259790226817,
+        "speedup": 5.598263053671715,
+        "max_statistic_difference": 0.0,
+        "max_replicate_difference": 0
+      },
+      {
+        "n_eff": 5000,
+        "B": 0,
+        "metric": "dcr",
+        "rust_jobs1_s": 2.64060902222991,
+        "gpu_fp64_s": 0.664102653041482,
+        "speedup": 3.976206103282905,
+        "max_statistic_difference": 8.366587422869998e-10,
+        "max_replicate_difference": 0
+      },
+      {
+        "n_eff": 5000,
+        "B": 2,
+        "metric": "prdc",
+        "rust_jobs1_s": 19.65159040503204,
+        "gpu_fp64_s": 0.7934521632269025,
+        "speedup": 24.767202505455014,
+        "max_statistic_difference": 0.0,
+        "max_replicate_difference": 0.0
+      },
+      {
+        "n_eff": 5000,
+        "B": 2,
+        "metric": "dcr",
+        "rust_jobs1_s": 6.929725807160139,
+        "gpu_fp64_s": 0.6786534311249852,
+        "speedup": 10.21099354890599,
+        "max_statistic_difference": 8.366587422869998e-10,
+        "max_replicate_difference": 3.6039242701235708e-09
+      }
+    ]
+  },
+  "trend_prepared_100000_by_100": [
+    {
+      "n_eff": 100000,
+      "numeric": 50,
+      "categorical": 50,
+      "cardinality": 10,
+      "fp32_warm_s": 0.08947539143264294,
+      "fp64_warm_s": 0.08658035565167665,
+      "fp32_extra_MiB": 273.11376953125,
+      "fp64_extra_MiB": 348.3056640625,
+      "fp32_fp64_score_difference": 2.176428925970697e-09
+    },
+    {
+      "n_eff": 100000,
+      "numeric": 50,
+      "categorical": 50,
+      "cardinality": 1024,
+      "fp32_warm_s": 0.6313138511031866,
+      "fp64_warm_s": 0.6421995367854834,
+      "fp32_extra_MiB": 309.48388671875,
+      "fp64_extra_MiB": 348.3056640625,
+      "fp32_fp64_score_difference": 5.008910364256991e-08
+    },
+    {
+      "n_eff": 100000,
+      "numeric": 50,
+      "categorical": 50,
+      "cardinality": 15000,
+      "fp32_warm_s": 0.6523565957322717,
+      "fp64_warm_s": 0.6461823685094714,
+      "fp32_extra_MiB": 309.48388671875,
+      "fp64_extra_MiB": 348.3056640625,
+      "fp32_fp64_score_difference": 5.125912527770282e-08
+    }
+  ],
+  "trend_report_comparisons_against_Rust_jobs1": [
+    {
+      "n_eff": 5000,
+      "B": 0,
+      "gpu_fp64_s": 0.6018546679988503,
+      "rust_jobs1_s": 0.5991543019190431,
+      "speedup": 0.9955132588922406,
+      "fp64_rust_score_difference": 1.7763568394002505e-15,
+      "fp32_fp64_score_difference": 5.4603424559651614e-08,
+      "max_fp64_rust_replicate_difference": 0,
+      "max_fp32_fp64_replicate_difference": 0
+    },
+    {
+      "n_eff": 5000,
+      "B": 2,
+      "gpu_fp64_s": 0.9703034590929747,
+      "rust_jobs1_s": 0.9834466129541397,
+      "speedup": 1.013545405551219,
+      "fp64_rust_score_difference": 1.7763568394002505e-15,
+      "fp32_fp64_score_difference": 5.4603424559651614e-08,
+      "max_fp64_rust_replicate_difference": 4.440892098500626e-15,
+      "max_fp32_fp64_replicate_difference": 8.785215599438345e-08
+    }
+  ],
+  "conditional_and_classifier_prepared_against_ATen_CPU_jobs4": {
+    "conditional-small": {
+      "n_eff": 1000,
+      "raw_columns": 20,
+      "cardinality": 10,
+      "mode": "prepared",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 0.012779902666807175,
+      "GPU_FP64_s": 0.15235820226371288,
+      "GPU_FP32_s": 0.1427734661847353,
+      "CPU_over_GPU_FP64": 0.08388063443205224,
+      "GPU_FP64_peak_extra_bytes": 9494528,
+      "GPU_FP32_peak_extra_bytes": 6976512,
+      "FP64_max_score_or_replica_error_vs_CPU": 1.1102230246251565e-16,
+      "FP32_max_score_or_replica_error_vs_CPU": 8.583110022719609e-08,
+      "flags_equal": true
+    },
+    "conditional-wide": {
+      "n_eff": 5000,
+      "raw_columns": 100,
+      "cardinality": 10,
+      "mode": "prepared",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 2.3520645312964916,
+      "GPU_FP64_s": 1.2208829447627068,
+      "GPU_FP32_s": 1.211650202050805,
+      "CPU_over_GPU_FP64": 1.9265274704559359,
+      "GPU_FP64_peak_extra_bytes": 145414656,
+      "GPU_FP32_peak_extra_bytes": 115968512,
+      "FP64_max_score_or_replica_error_vs_CPU": 1.1102230246251565e-16,
+      "FP32_max_score_or_replica_error_vs_CPU": 1.3119514652437658e-07,
+      "flags_equal": true
+    },
+    "c2st-direct": {
+      "n_eff": 5000,
+      "raw_columns": 100,
+      "cardinality": 10,
+      "mode": "prepared",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 0.2749595120549202,
+      "GPU_FP64_s": 0.025495225563645363,
+      "GPU_FP32_s": 0.0359529722481966,
+      "CPU_over_GPU_FP64": 10.784745220963869,
+      "GPU_FP64_peak_extra_bytes": 101868032,
+      "GPU_FP32_peak_extra_bytes": 56117248,
+      "FP64_max_score_or_replica_error_vs_CPU": 0.0,
+      "FP32_max_score_or_replica_error_vs_CPU": 2.493091820765514e-07,
+      "flags_equal": true
+    },
+    "c2st-cg": {
+      "n_eff": 1000,
+      "raw_columns": 100,
+      "cardinality": 10,
+      "mode": "prepared",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 0.237184576690197,
+      "GPU_FP64_s": 0.09680525586009026,
+      "GPU_FP32_s": 0.10782670229673386,
+      "CPU_over_GPU_FP64": 2.450120859480944,
+      "GPU_FP64_peak_extra_bytes": 26858496,
+      "GPU_FP32_peak_extra_bytes": 16262144,
+      "FP64_max_score_or_replica_error_vs_CPU": 2.9970089850950288e-06,
+      "FP32_max_score_or_replica_error_vs_CPU": 2.982075758772851e-06,
+      "flags_equal": true
+    },
+    "c2st-large": {
+      "n_eff": 100000,
+      "raw_columns": 100,
+      "cardinality": 10,
+      "mode": "prepared",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 4.414444894529879,
+      "GPU_FP64_s": 0.1193127604201436,
+      "GPU_FP32_s": 0.1191424373537302,
+      "CPU_over_GPU_FP64": 36.998933550653035,
+      "GPU_FP64_peak_extra_bytes": 1802927104,
+      "GPU_FP32_peak_extra_bytes": 986359296,
+      "FP64_max_score_or_replica_error_vs_CPU": 0.0,
+      "FP32_max_score_or_replica_error_vs_CPU": 5.8854030093868914e-08,
+      "flags_equal": true
+    }
+  },
+  "conditional_and_classifier_complete_reports_against_ATen_CPU_jobs4": {
+    "conditional-report-B0": {
+      "n_eff": 1000,
+      "raw_columns": 20,
+      "cardinality": 10,
+      "mode": "report",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 0.04562464263290167,
+      "GPU_FP64_s": 0.17810943629592657,
+      "GPU_FP32_s": 0.174027556553483,
+      "CPU_over_GPU_FP64": 0.25616072669556317,
+      "GPU_FP64_peak_extra_bytes": 10767872,
+      "GPU_FP32_peak_extra_bytes": 7863808,
+      "FP64_max_score_or_replica_error_vs_CPU": 1.1102230246251565e-16,
+      "FP32_max_score_or_replica_error_vs_CPU": 8.490335345889832e-08,
+      "flags_equal": true
+    },
+    "conditional-report-B2": {
+      "n_eff": 1000,
+      "raw_columns": 20,
+      "cardinality": 10,
+      "mode": "report",
+      "B": 2,
+      "CPU_jobs": 4,
+      "CPU_s": 0.15958765801042318,
+      "GPU_FP64_s": 0.8922301009297371,
+      "GPU_FP32_s": 0.8846962498500943,
+      "CPU_over_GPU_FP64": 0.17886379067925065,
+      "GPU_FP64_peak_extra_bytes": 10139648,
+      "GPU_FP32_peak_extra_bytes": 7461888,
+      "FP64_max_score_or_replica_error_vs_CPU": 2.220446049250313e-16,
+      "FP32_max_score_or_replica_error_vs_CPU": 8.572248999527687e-08,
+      "flags_equal": true
+    },
+    "c2st-report-B0": {
+      "n_eff": 5000,
+      "raw_columns": 100,
+      "cardinality": 10,
+      "mode": "report",
+      "B": 0,
+      "CPU_jobs": 4,
+      "CPU_s": 0.7819716222584248,
+      "GPU_FP64_s": 0.5443113464862108,
+      "GPU_FP32_s": 0.5705416658893228,
+      "CPU_over_GPU_FP64": 1.436625613826396,
+      "GPU_FP64_peak_extra_bytes": 118144512,
+      "GPU_FP32_peak_extra_bytes": 68146176,
+      "FP64_max_score_or_replica_error_vs_CPU": 0.0,
+      "FP32_max_score_or_replica_error_vs_CPU": 1.2195326470898493e-07,
+      "flags_equal": true
+    },
+    "c2st-report-B2": {
+      "n_eff": 5000,
+      "raw_columns": 100,
+      "cardinality": 10,
+      "mode": "report",
+      "B": 2,
+      "CPU_jobs": 4,
+      "CPU_s": 2.686799142509699,
+      "GPU_FP64_s": 0.866463378071785,
+      "GPU_FP32_s": 0.9694143077358603,
+      "CPU_over_GPU_FP64": 3.100880210873843,
+      "GPU_FP64_peak_extra_bytes": 118144512,
+      "GPU_FP32_peak_extra_bytes": 68146176,
+      "FP64_max_score_or_replica_error_vs_CPU": 7.79940093609266e-06,
+      "FP32_max_score_or_replica_error_vs_CPU": 6.136902280906575e-06,
+      "flags_equal": true
+    }
+  },
+  "conditional_and_classifier_large_or_wide": {
+    "conditional-large": {
+      "n_eff": 100000,
+      "numeric": 50,
+      "categorical": 50,
+      "cardinality": 10,
+      "GPU_FP64_s": 3.7224592538550496,
+      "GPU_FP32_s": 2.970937181264162,
+      "GPU_FP64_peak_extra_bytes": 963340800,
+      "GPU_FP32_peak_extra_bytes": 827988480,
+      "max_FP32_FP64_score_error": 1.2395579229718123e-07
+    },
+    "c2st-wide-vocabulary": {
+      "n_eff": 5000,
+      "numeric": 50,
+      "categorical": 50,
+      "cardinality": 15000,
+      "GPU_FP64_s": 0.2904798621311784,
+      "GPU_FP32_s": 0.28521493822336197,
+      "GPU_FP64_peak_extra_bytes": 68387840,
+      "GPU_FP32_peak_extra_bytes": 57038336,
+      "max_FP32_FP64_score_error": 0.0,
+      "encoded_features": [
+        149355,
+        149570,
+        149688
+      ],
+      "preconditioners": [
+        "diagonal",
+        "diagonal",
+        "diagonal"
+      ]
+    }
+  },
+  "CPU_against_Rust": {
+    "method": "FP64, same-host prepared inputs and draws, warm call plus median of seven alternating C++/Rust runs. Source preparation and compilation excluded from prepared timings; full reports include preparation and requested bootstrap. Before and after batches run sequentially; each batch has its own alternating Rust reference.",
+    "comparisons": [
+      {
+        "name": "shape-mixed-jobs1",
+        "metric": "shape",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 1,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.03458056412637234,
+        "rust_after_seconds": 0.02236797846853733,
+        "cpp_after_over_rust": 1.545985220569358
+      },
+      {
+        "name": "shape-mixed-jobs4",
+        "metric": "shape",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.010498587042093277,
+        "rust_after_seconds": 0.020006917417049408,
+        "cpp_after_over_rust": 0.5247478571159911
+      },
+      {
+        "name": "shape-numeric-jobs4",
+        "metric": "shape",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 0,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.00888819620013237,
+        "rust_after_seconds": 0.018670279532670975,
+        "cpp_after_over_rust": 0.4760612279306791
+      },
+      {
+        "name": "shape-categorical-jobs4",
+        "metric": "shape",
+        "n_eff": 5000,
+        "numeric": 0,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.002226235345005989,
+        "rust_after_seconds": 0.0009871367365121841,
+        "cpp_after_over_rust": 2.2552451576990933
+      },
+      {
+        "name": "shape-card1024",
+        "metric": "shape",
+        "n_eff": 1000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 1024,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.002309463918209076,
+        "rust_after_seconds": 0.00394512340426445,
+        "cpp_after_over_rust": 0.5853971299637114
+      },
+      {
+        "name": "shape-card15000",
+        "metric": "shape",
+        "n_eff": 1000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 15000,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.0023292694240808487,
+        "rust_after_seconds": 0.004152165725827217,
+        "cpp_after_over_rust": 0.560976988368353
+      },
+      {
+        "name": "c2st-direct-jobs1",
+        "metric": "linear_c2st",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 1,
+        "solver": "direct",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.4585106261074543,
+        "rust_after_seconds": 0.46131177619099617,
+        "cpp_after_over_rust": 0.9939278591440464
+      },
+      {
+        "name": "c2st-direct-jobs4",
+        "metric": "linear_c2st",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "direct",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.2440518829971552,
+        "rust_after_seconds": 0.2305661253631115,
+        "cpp_after_over_rust": 1.0584897612899786
+      },
+      {
+        "name": "c2st-cg-jobs1",
+        "metric": "linear_c2st",
+        "n_eff": 1000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 1,
+        "solver": "newton-cg",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.3393465671688318,
+        "rust_after_seconds": 0.3054001573473215,
+        "cpp_after_over_rust": 1.1111538714202567
+      },
+      {
+        "name": "c2st-cg-jobs4",
+        "metric": "linear_c2st",
+        "n_eff": 1000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "newton-cg",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.2108240555971861,
+        "rust_after_seconds": 0.1997761819511652,
+        "cpp_after_over_rust": 1.0553012553254297
+      },
+      {
+        "name": "c2st-cg-5000-jobs4",
+        "metric": "linear_c2st",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "newton-cg",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.3013804703950882,
+        "rust_after_seconds": 0.39120144955813885,
+        "cpp_after_over_rust": 0.7703971208069315
+      },
+      {
+        "name": "report-shape-B0",
+        "metric": "shape",
+        "n_eff": 1000,
+        "numeric": 10,
+        "categorical": 10,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "report",
+        "B": 0,
+        "cpp_after_seconds": 0.03385046683251858,
+        "rust_after_seconds": 0.033865511417388916,
+        "cpp_after_over_rust": 0.9995557549778323
+      },
+      {
+        "name": "report-shape-B2",
+        "metric": "shape",
+        "n_eff": 1000,
+        "numeric": 10,
+        "categorical": 10,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "report",
+        "B": 2,
+        "cpp_after_seconds": 0.03823084011673927,
+        "rust_after_seconds": 0.03725198656320572,
+        "cpp_after_over_rust": 1.0262765464030414
+      },
+      {
+        "name": "report-c2st-B2",
+        "metric": "linear_c2st",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "report",
+        "B": 2,
+        "cpp_after_seconds": 2.7370466869324446,
+        "rust_after_seconds": 2.7691452335566282,
+        "cpp_after_over_rust": 0.9884085001266051
+      },
+      {
+        "name": "shape-100000-jobs4",
+        "metric": "shape",
+        "n_eff": 100000,
+        "numeric": 50,
+        "categorical": 50,
+        "requested_cardinality": 10,
+        "jobs": 4,
+        "solver": "auto",
+        "mode": "prepared",
+        "B": 0,
+        "cpp_after_seconds": 0.2563405018299818,
+        "rust_after_seconds": 0.4499770738184452,
+        "cpp_after_over_rust": 0.569674582873102
+      }
+    ]
+  },
+  "interpretation": [
+    "Prepared warm measurements exclude import, compilation/JIT, initial host preparation and upload; they include gathering, transforms, fitting, reductions and scalar downloads.",
+    "Complete report warm measurements include cleaning, encoding, upload, point/ideal and requested bootstrap refits. End-to-end gains can be much smaller than prepared-kernel gains.",
+    "Distance first-call timings are not full process-cold times. Setup/import and some kernel initialization can occur before the first-call timer; use the benchmark tool to measure deployment-specific cold cost.",
+    "Small Conditional workloads favor CPU; large and wide classifier cases favor GPU in these measurements. Automatic routing is conservative and explicit device overrides remain available.",
+    "FP32 may change strict membership, bins or rarity decisions at rounded boundaries; accuracy reports are workload-specific and do not imply bitwise FP32/FP64 parity.",
+    "Only the listed Torch/CUDA/Triton combination and A100 were profiled. CPU timing reflects the listed worker count. Pure precision kernels, no mixed precision or refinement.",
+    "The 100000-by-100000 distance search streams tiles. These distance timings demonstrate full pairwise work without allocating a full distance matrix."
+  ],
+  "reproduction": {
+    "tool": "examples/benchmark_gpu.py",
+    "modes": [
+      "prepared",
+      "report"
+    ],
+    "columns": 100,
+    "numeric_fraction": 0.5,
+    "categorical_fraction": 0.5,
+    "source_rows_per_side": "2 * rows",
+    "draw_seeds": "810/811 source generation; identical NumPy draws within each comparison",
+    "example_args": "--device cuda:0 --rows 100000 --columns 100 --cardinality 10 --dtype float64 --workspace-mb 2048 --repeat 3 --metrics conditional_fidelity linear_c2st --out benchmark.json"
+  },
+  "portable_release_CPU_profile": {
+    "artifact": "Matched binary-enabled CPU wheel; baseline compiler target, no -march=native; Torch 2.11.0+cpu",
+    "scope": "Prepared FP64 tasks, four CPU workers, 5000 rows per side, 50 numeric plus 50 categorical columns, cardinality 10, B=0. Timed initial call plus median of two warm calls. Source preparation and prebuilt loading are recorded in setup_s and excluded from task timers; process import/startup is excluded. No contemporaneous Rust or GPU baseline was measured in this batch, so do not interpret timing differences from earlier batches as an isolated portable-build effect.",
+    "measurements": [
+      {
+        "metric": "shape",
+        "mode": "prepared",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "B": 0,
+        "jobs": 4,
+        "setup_s": 0.21152493730187416,
+        "execution": {
+          "backend": "torch",
+          "implementation": "aten_cpp",
+          "device": "cpu",
+          "dtype": "float64"
+        },
+        "first_call_s": 0.040746670216321945,
+        "median_s": 0.010534938424825668,
+        "runs_s": [
+          0.01062026061117649,
+          0.010449616238474846
+        ],
+        "peak_extra_bytes": null,
+        "scores": {
+          "shape": 0.980016
+        },
+        "replicates": {},
+        "torch": "2.11.0+cpu",
+        "cuda": null
+      },
+      {
+        "metric": "trend",
+        "mode": "prepared",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "B": 0,
+        "jobs": 4,
+        "setup_s": 0.00015295296907424927,
+        "execution": {
+          "backend": "torch",
+          "implementation": "aten_cpp",
+          "device": "cpu",
+          "dtype": "float64",
+          "correlation_arithmetic": "ieee",
+          "contingency_storage": "bounded_dense_or_occupied"
+        },
+        "first_call_s": 0.055844664573669434,
+        "median_s": 0.056449529714882374,
+        "runs_s": [
+          0.05227062851190567,
+          0.06062843091785908
+        ],
+        "peak_extra_bytes": null,
+        "scores": {
+          "trend": 0.9384989364397892
+        },
+        "replicates": {},
+        "torch": "2.11.0+cpu",
+        "cuda": null
+      },
+      {
+        "metric": "conditional_fidelity",
+        "mode": "prepared",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "B": 0,
+        "jobs": 4,
+        "setup_s": 0.000187775120139122,
+        "execution": {
+          "backend": "torch",
+          "implementation": "aten_cpp",
+          "device": "cpu",
+          "dtype": "float64",
+          "correlation_arithmetic": "ieee",
+          "contingency_storage": "bounded_dense_or_occupied"
+        },
+        "first_call_s": 2.4215693529695272,
+        "median_s": 2.446107585914433,
+        "runs_s": [
+          2.408974274992943,
+          2.483240896835923
+        ],
+        "peak_extra_bytes": null,
+        "scores": {
+          "cond_shape_all": 0.9059652182540148,
+          "cond_shape_rare": 0.7743537434970653,
+          "cond_trend_all": 0.7489684211556846,
+          "cond_trend_rare": 0.4745174834987453,
+          "recovery_all": 1.0031297087020092,
+          "recovery_rare": 1.0081931281857708
+        },
+        "replicates": {},
+        "torch": "2.11.0+cpu",
+        "cuda": null
+      },
+      {
+        "metric": "linear_c2st",
+        "mode": "prepared",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "B": 0,
+        "jobs": 4,
+        "setup_s": 0.00033108703792095184,
+        "execution": {
+          "backend": "torch",
+          "implementation": "aten_cpp",
+          "device": "cpu",
+          "dtype": "float64"
+        },
+        "first_call_s": 0.33707792684435844,
+        "median_s": 0.335681039839983,
+        "runs_s": [
+          0.33437302708625793,
+          0.33698905259370804
+        ],
+        "peak_extra_bytes": null,
+        "scores": {
+          "auc": 0.5002208441865048
+        },
+        "replicates": {},
+        "fit_diagnostics": [
+          {
+            "fold": 0,
+            "training_rows": 6666,
+            "scoring_rows": 3334,
+            "features": 550,
+            "converged": true,
+            "solver": "direct",
+            "reason": "gradient_squared",
+            "iterations": 2,
+            "cg_iterations": 0,
+            "gradient_squared": 3.724331245348327e-09,
+            "decrement_squared": 0.00042765431806495813
+          },
+          {
+            "fold": 1,
+            "training_rows": 6667,
+            "scoring_rows": 3333,
+            "features": 550,
+            "converged": true,
+            "solver": "direct",
+            "reason": "gradient_squared",
+            "iterations": 2,
+            "cg_iterations": 0,
+            "gradient_squared": 2.3807630877785005e-09,
+            "decrement_squared": 0.00035131340155911855
+          },
+          {
+            "fold": 2,
+            "training_rows": 6667,
+            "scoring_rows": 3333,
+            "features": 550,
+            "converged": true,
+            "solver": "direct",
+            "reason": "gradient_squared",
+            "iterations": 2,
+            "cg_iterations": 0,
+            "gradient_squared": 2.253933503069273e-09,
+            "decrement_squared": 0.0003589630171554745
+          }
+        ],
+        "torch": "2.11.0+cpu",
+        "cuda": null
+      },
+      {
+        "metric": "prdc",
+        "mode": "prepared",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "B": 0,
+        "jobs": 4,
+        "setup_s": 0.00019046105444431305,
+        "execution": {
+          "backend": "torch",
+          "implementation": "aten_cpp",
+          "device": "cpu",
+          "dtype": "float64",
+          "distance_arithmetic": "direct"
+        },
+        "first_call_s": 1.2800575569272041,
+        "median_s": 1.3037483664229512,
+        "runs_s": [
+          1.331293098628521,
+          1.2762036342173815
+        ],
+        "peak_extra_bytes": null,
+        "scores": {
+          "precision": 0.9906,
+          "recall": 0.9928,
+          "density": 0.98776,
+          "coverage": 0.963
+        },
+        "replicates": {},
+        "torch": "2.11.0+cpu",
+        "cuda": null
+      },
+      {
+        "metric": "dcr",
+        "mode": "prepared",
+        "n_eff": 5000,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "B": 0,
+        "jobs": 4,
+        "setup_s": 0.00034681521356105804,
+        "execution": {
+          "backend": "torch",
+          "implementation": "aten_cpp",
+          "device": "cpu",
+          "dtype": "float64",
+          "distance_arithmetic": "direct"
+        },
+        "first_call_s": 0.8369642272591591,
+        "median_s": 0.8156750416383147,
+        "runs_s": [
+          0.8218869548290968,
+          0.8094631284475327
+        ],
+        "peak_extra_bytes": null,
+        "scores": {
+          "median": 8.584733096270934,
+          "ratio": 0.9998447285396649
+        },
+        "replicates": {},
+        "torch": "2.11.0+cpu",
+        "cuda": null
+      }
+    ]
+  },
+  "installed_artifact_validation": {
+    "CPU_Torch_2_11_Python_3_13": {
+      "fast_passed": 489,
+      "skipped": 178,
+      "slow_deselected": 7,
+      "installed_reports_C_and_CPP_compilers_disabled": true
+    },
+    "CPU_Torch_2_6": {
+      "Python_3_10_numerical_protocol_passed": 162,
+      "Python_3_11_numerical_protocol_passed": 158,
+      "C_and_CPP_compilers_disabled_reports": true
+    },
+    "CUDA_Torch_2_11_cu130_Triton_3_6_Python_3_13": {
+      "tensor_host_packaging_passed": 344,
+      "test_suite_seconds": 59.76,
+      "C_and_CPP_compilers_disabled": true,
+      "extra_SDK_paths_removed": true,
+      "second_empty_Triton_cache": true,
+      "FP32_and_FP64": true,
+      "cold_full_reports_B": [
+        0,
+        2
+      ],
+      "large_auto_report": {
+        "rows_per_side": 5000,
+        "columns": 100,
+        "CPU_metrics": [
+          "shape"
+        ],
+        "CUDA_metrics": [
+          "trend",
+          "conditional_fidelity",
+          "linear_c2st",
+          "prdc",
+          "dcr"
+        ]
+      },
+      "device_JIT": "Normal bundled LLVM/PTX compilation populated fresh cache; matched prebuilt host wrappers avoid C compiler calls."
+    },
+    "wheel_matching": "CPU abi3 Python>=3.10; CUDA cp313-cp313; exact Torch distribution pins with complete runtime Torch/CUDA metadata, CUDA Triton3.6.0 and Python SOABI checks",
+    "release_integrity": {
+      "Python_and_CPP_source_files_checked_per_artifact": 80,
+      "artifacts": [
+        "CPU Torch2.6",
+        "CPU Torch2.11",
+        "CUDA Torch2.11"
+      ],
+      "checks": [
+        "lint",
+        "format",
+        "diff",
+        "dependency lock",
+        "traceability"
+      ]
+    }
+  },
+  "history": "The distance, Trend, Conditional, C2ST, Rust comparison and earlier installation fields record the previous migration checkpoint. Rust has since been removed; current backends are auto/torch/python. The Shape cleanup measurements below describe current CPU/CUDA execution.",
+  "historical_measurement_date": "2026-10-12",
+  "Shape_cleanup": {
+    "measurement_date": "2026-10-13",
+    "hardware": {
+      "GPU": "NVIDIA A100 SXM4 80GB",
+      "CPU": "Intel Xeon Platinum 8470"
+    },
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "triton": "3.6.0",
+      "CUDA": "13.0"
+    },
+    "precision": "Pure FP32/FP64 sort/KS/probability reductions; exact int64 categorical counts. No mixed floating precision, TF32 or refinement.",
+    "prepared_scope": "Matched rows per side; 2*rows source pools, 50 numeric and 50 categorical columns, four CPU workers, fixed source seeds1390/1391 and identity draws. setup_s includes context preparation/upload; first_call_s includes initial compiled-library or shape/device JIT work after setup. Process import/startup and synthetic input generation are excluded. median_s is the median of three warm task calls, including gathering, sorting/counting, KS/TV and scalar download.",
+    "report_scope": "Complete FP64 Shape reports include cleaning, shared host preparation/upload, matched point draws and requested B=0/2 bootstrap refits/ideal plus assembly. Source seeds1392/1393, four CPU workers and median of two warm reports. Process import/startup and synthetic input generation are excluded. Initial source-library/JIT costs appear in first_call_s. B=0 omits ideal; NaN ideal is serialized here as null.",
+    "memory_scope": "Peak extra CUDA allocator bytes above persistent inputs; excludes driver/framework allocations outside the PyTorch allocator. Prepared FP64 max420630528 bytes, FP32 max305511936 bytes in 100000-row cases.",
+    "automatic_policy": "Use CUDA when n_eff*columns>=5000000 for point-only, >=2000000 with requested bootstrap or compatible CUDA-resident inputs; small workloads remain CPU without probing CUDA.",
+    "prepared": [
+      {
+        "rows": 1000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "jobs": 4,
+        "setup_s": 0.045463677495718,
+        "score": 0.9512999999999999,
+        "first_call_s": 32.90504764392972,
+        "median_s": 0.0021048206835985184,
+        "runs_s": [
+          0.0022528506815433502,
+          0.002086350694298744,
+          0.0021048206835985184
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 1000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.662543835118413,
+        "score": 0.9512999999999999,
+        "first_call_s": 1.6062709614634514,
+        "median_s": 0.002696450799703598,
+        "runs_s": [
+          0.003273485228419304,
+          0.002696450799703598,
+          0.0025147907435894012
+        ],
+        "peak_extra_bytes": 2925056
+      },
+      {
+        "rows": 5000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "jobs": 4,
+        "setup_s": 0.15328693576157093,
+        "score": 0.979286,
+        "first_call_s": 0.011185307055711746,
+        "median_s": 0.010530946776270866,
+        "runs_s": [
+          0.010594911873340607,
+          0.01046024076640606,
+          0.010530946776270866
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 5000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.010260524228215218,
+        "score": 0.9792859999999999,
+        "first_call_s": 0.30156218633055687,
+        "median_s": 0.003176560625433922,
+        "runs_s": [
+          0.003245016559958458,
+          0.003176560625433922,
+          0.002999706193804741
+        ],
+        "peak_extra_bytes": 22002688
+      },
+      {
+        "rows": 20000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "jobs": 4,
+        "setup_s": 0.5317954141646624,
+        "score": 0.990042,
+        "first_call_s": 0.04738820157945156,
+        "median_s": 0.046243034303188324,
+        "runs_s": [
+          0.046243034303188324,
+          0.04646429605782032,
+          0.045941540971398354
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 20000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.024509483948349953,
+        "score": 0.990042,
+        "first_call_s": 0.1955490056425333,
+        "median_s": 0.003247736021876335,
+        "runs_s": [
+          0.0034612473100423813,
+          0.003203902393579483,
+          0.003247736021876335
+        ],
+        "peak_extra_bytes": 85052928
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "jobs": 4,
+        "setup_s": 3.1188678815960884,
+        "score": 0.9951781,
+        "first_call_s": 0.2658648397773504,
+        "median_s": 0.26453846879303455,
+        "runs_s": [
+          0.26453846879303455,
+          0.265297120437026,
+          0.2637975513935089
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.5041580442339182,
+        "score": 0.9951781,
+        "first_call_s": 0.1944801416248083,
+        "median_s": 0.009222961962223053,
+        "runs_s": [
+          0.009425211697816849,
+          0.009222961962223053,
+          0.009165650233626366
+        ],
+        "peak_extra_bytes": 420630528
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 10,
+        "dtype": "float32",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.563131794333458,
+        "score": 0.99517822265625,
+        "first_call_s": 0.16480131074786186,
+        "median_s": 0.007433570921421051,
+        "runs_s": [
+          0.007644211873412132,
+          0.007433570921421051,
+          0.007405620068311691
+        ],
+        "peak_extra_bytes": 305511936
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 1024,
+        "dtype": "float64",
+        "device": "cpu",
+        "jobs": 4,
+        "setup_s": 3.1114996168762445,
+        "score": 0.9694131,
+        "first_call_s": 0.2764759100973606,
+        "median_s": 0.2630801107734442,
+        "runs_s": [
+          0.2630801107734442,
+          0.2730643656104803,
+          0.2618448343127966
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 1024,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.4991116691380739,
+        "score": 0.9694131,
+        "first_call_s": 0.010623054578900337,
+        "median_s": 0.007756290957331657,
+        "runs_s": [
+          0.007787490263581276,
+          0.007756290957331657,
+          0.007741428911685944
+        ],
+        "peak_extra_bytes": 420630528
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 1024,
+        "dtype": "float32",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.5236800536513329,
+        "score": 0.9694132208824158,
+        "first_call_s": 0.006362734362483025,
+        "median_s": 0.005936652421951294,
+        "runs_s": [
+          0.0060125235468149185,
+          0.005936652421951294,
+          0.0059283338487148285
+        ],
+        "peak_extra_bytes": 305511936
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 15000,
+        "dtype": "float64",
+        "device": "cpu",
+        "jobs": 4,
+        "setup_s": 3.7358912229537964,
+        "score": 0.8896369,
+        "first_call_s": 0.29649083875119686,
+        "median_s": 0.29718662798404694,
+        "runs_s": [
+          0.2956202160567045,
+          0.36611503176391125,
+          0.29718662798404694
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 15000,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.4911846499890089,
+        "score": 0.8896369000000001,
+        "first_call_s": 0.010151389986276627,
+        "median_s": 0.007631700485944748,
+        "runs_s": [
+          0.0076659806072711945,
+          0.007606729865074158,
+          0.007631700485944748
+        ],
+        "peak_extra_bytes": 420630528
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "numeric": 50,
+        "categorical": 50,
+        "cardinality": 15000,
+        "dtype": "float32",
+        "device": "cuda:0",
+        "jobs": 4,
+        "setup_s": 0.5202565472573042,
+        "score": 0.8896369934082031,
+        "first_call_s": 0.0061608608812093735,
+        "median_s": 0.005794588476419449,
+        "runs_s": [
+          0.005918243899941444,
+          0.005794588476419449,
+          0.00576714426279068
+        ],
+        "peak_extra_bytes": 305511936
+      }
+    ],
+    "complete_reports": [
+      {
+        "rows": 5000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "bootstrap": 0,
+        "jobs": 4,
+        "score": 0.97919,
+        "ideal": null,
+        "first_call_s": 31.61683434806764,
+        "median_s": 0.5433803712949157,
+        "runs_s": [
+          0.5584332793951035,
+          0.5283274631947279
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 5000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "bootstrap": 0,
+        "jobs": 4,
+        "score": 0.97919,
+        "ideal": null,
+        "first_call_s": 1.9902852270752192,
+        "median_s": 0.5235581072047353,
+        "runs_s": [
+          0.5252062026411295,
+          0.5219100117683411
+        ],
+        "peak_extra_bytes": 38993920
+      },
+      {
+        "rows": 5000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "bootstrap": 2,
+        "jobs": 4,
+        "score": 0.97919,
+        "ideal": 0.9804559999999999,
+        "first_call_s": 0.6206338312476873,
+        "median_s": 0.6235622670501471,
+        "runs_s": [
+          0.6184691339731216,
+          0.6286554001271725
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 5000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "bootstrap": 2,
+        "jobs": 4,
+        "score": 0.97919,
+        "ideal": 0.980456,
+        "first_call_s": 0.5384104941040277,
+        "median_s": 0.5350827537477016,
+        "runs_s": [
+          0.524784505367279,
+          0.5453810021281242
+        ],
+        "peak_extra_bytes": 22002688
+      },
+      {
+        "rows": 20000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "bootstrap": 0,
+        "jobs": 4,
+        "score": 0.989541,
+        "ideal": null,
+        "first_call_s": 1.9316423665732145,
+        "median_s": 1.9690403444692492,
+        "runs_s": [
+          1.972456481307745,
+          1.9656242076307535
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 20000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "bootstrap": 0,
+        "jobs": 4,
+        "score": 0.9895410000000001,
+        "ideal": null,
+        "first_call_s": 1.9172243531793356,
+        "median_s": 1.9095563013106585,
+        "runs_s": [
+          1.8916217423975468,
+          1.9274908602237701
+        ],
+        "peak_extra_bytes": 85052928
+      },
+      {
+        "rows": 20000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "bootstrap": 2,
+        "jobs": 4,
+        "score": 0.989541,
+        "ideal": 0.9900485,
+        "first_call_s": 2.317140670493245,
+        "median_s": 2.3311093086376786,
+        "runs_s": [
+          2.3289563842117786,
+          2.3332622330635786
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 20000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "bootstrap": 2,
+        "jobs": 4,
+        "score": 0.9895410000000001,
+        "ideal": 0.9900484999999999,
+        "first_call_s": 1.8808362931013107,
+        "median_s": 1.9714757660403848,
+        "runs_s": [
+          1.9794715773314238,
+          1.9634799547493458
+        ],
+        "peak_extra_bytes": 85052928
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "bootstrap": 0,
+        "jobs": 4,
+        "score": 0.9955795999999999,
+        "ideal": null,
+        "first_call_s": 10.16013604030013,
+        "median_s": 9.686399813741446,
+        "runs_s": [
+          9.656820550560951,
+          9.71597907692194
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "bootstrap": 0,
+        "jobs": 4,
+        "score": 0.9955796000000001,
+        "ideal": null,
+        "first_call_s": 9.374980878084898,
+        "median_s": 9.67466236371547,
+        "runs_s": [
+          9.739639468491077,
+          9.609685258939862
+        ],
+        "peak_extra_bytes": 420630528
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cpu",
+        "bootstrap": 2,
+        "jobs": 4,
+        "score": 0.9955795999999999,
+        "ideal": 0.9955514,
+        "first_call_s": 11.01388313062489,
+        "median_s": 11.040485663339496,
+        "runs_s": [
+          10.997920654714108,
+          11.083050671964884
+        ],
+        "peak_extra_bytes": null
+      },
+      {
+        "rows": 100000,
+        "columns": 100,
+        "cardinality": 10,
+        "dtype": "float64",
+        "device": "cuda:0",
+        "bootstrap": 2,
+        "jobs": 4,
+        "score": 0.9955796000000001,
+        "ideal": 0.9955514,
+        "first_call_s": 9.425860298797488,
+        "median_s": 9.680720374919474,
+        "runs_s": [
+          9.509763408452272,
+          9.851677341386676
+        ],
+        "peak_extra_bytes": 420630528
+      }
+    ],
+    "interpretation": [
+      "At 100000x100, warm prepared FP64 GPU is approximately 7.63-9.22ms versus 263-297ms CPU; FP32 GPU is 5.79-7.43ms across cardinality10/1024/15000.",
+      "The 1000x100 point is faster on CPU (2.10ms) than GPU (2.70ms); conservative routing protects small and point-only evaluations.",
+      "Complete 100000x100 reports are dominated by host preparation: B0 CPU9.69s/GPU9.67s, B2 CPU11.04s/GPU9.68s. Prepared kernel acceleration does not imply the same end-to-end speedup.",
+      "At 20000x100, complete B0 CPU1.97s/GPU1.91s and B2 CPU2.33s/GPU1.97s; batching bootstrap work amortizes GPU launch costs.",
+      "GPU FP64 scores agree with CPU within floating tolerance; FP32 score differences in the largest cases are approximately1.2e-7. These measurements do not imply bitwise cross-precision parity or a universal crossover."
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64" role="img" aria-labelledby="title description">
+  <title id="title">TabGenEval</title>
+  <desc id="description">A table of data with a magnifying glass for inspecting its records.</desc>
+  <rect x="3" y="6" width="44" height="49" rx="6" fill="#fff" stroke="#ccdbe3" stroke-width="2"/>
+  <path d="M9 6h32a6 6 0 0 1 6 6v7H3v-7a6 6 0 0 1 6-6Z" fill="#087f83"/>
+  <g stroke="#d5e3e9" stroke-width="2.5">
+    <path d="M3 31h44M3 43h44M18 19v36M32 19v36"/>
+  </g>
+  <g fill="#087f83">
+    <rect x="8" y="23" width="6" height="4" rx="1.5"/>
+    <rect x="22" y="35" width="6" height="4" rx="1.5"/>
+    <rect x="8" y="47" width="6" height="4" rx="1.5"/>
+  </g>
+  <path d="m61 48 7 8" fill="none" stroke="#6555af" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="51" cy="37" r="14" fill="#fff" stroke="#6555af" stroke-width="4"/>
+  <g stroke="#d5e3e9" stroke-width="2.5" stroke-linecap="round">
+    <path d="M44 32h14M44 42h14M49 28v18"/>
+  </g>
+  <rect x="53" y="34" width="5" height="4" rx="1.3" fill="#087f83"/>
+</svg>

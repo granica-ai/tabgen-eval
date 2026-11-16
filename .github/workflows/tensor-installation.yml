@@ -1,0 +1,293 @@
+name: Tensor installation
+
+on:
+  pull_request:
+  push:
+    branches: [main, pytorch-gpu, eval-harness-improve]
+  schedule:
+    - cron: '23 7 * * *'
+  workflow_dispatch:
+    inputs:
+      run_slow:
+        description: Run statistical calibration and performance checks
+        type: boolean
+        default: false
+      run_cuda:
+        description: Run CUDA checks on a provisioned Linux x64 CUDA 13 GPU runner
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  python-and-cpu:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-22.04
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/source-cpu-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Install Python, CPU Torch and supported CPU extras
+        run: |
+          uv python install '3.13'
+          uv venv --python '3.13'
+          uv pip install 'torch==2.11.0' --index-url https://download.pytorch.org/whl/cpu
+          uv pip install -e '.[arrow,xgboost]' pytest hypothesis pyright pandas-stubs
+          uv run --no-sync python -c 'import pyarrow, xgboost; assert not __import__("torch").cuda.is_available()'
+      - name: Check typed core contracts
+        run: uv run --no-sync python -m pyright
+      - name: Run the complete non-GPU fast suite
+        run: uv run --no-sync pytest -m 'not gpu and not calibration and not perf' -q
+
+  macos-source:
+    if: github.event_name != 'schedule'
+    runs-on: macos-15
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: '3.11'
+            torch: '2.6.0'
+          - python: '3.13'
+            torch: '2.11.0'
+          - python: '3.13'
+            torch: 'latest'
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/source-cpu-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Install OpenMP and native arm64 Python dependencies
+        run: |
+          brew install libomp
+          uv python install '${{ matrix.python }}'
+          uv venv --python '${{ matrix.python }}'
+          if [ '${{ matrix.torch }}' = 'latest' ]; then
+            uv pip install torch
+          else
+            uv pip install 'torch==${{ matrix.torch }}'
+          fi
+          uv pip install -e '.[arrow]' pytest hypothesis
+          uv run --no-sync python -c 'import platform, torch; assert platform.machine() == "arm64"; assert torch.version.cuda is None'
+      - name: Compile automatically through public CPU evaluation
+        run: uv run --no-sync python tools/check_installation.py --smoke --out '${{ runner.temp }}/reports/first.json'
+      - name: Reuse the source cache in a fresh process without compiler calls
+        run: |
+          uv run --no-sync python - <<'PY'
+          import os
+          import runpy
+          import sys
+          from pathlib import Path
+          from tabgen_eval.execution.torch.cpu import extension
+          root = Path(os.environ['TABGEN_EVAL_CPU_CACHE'])
+          libraries = list(root.rglob('tabgen_eval_cpu.dylib'))
+          assert len(libraries) == 1
+          before = libraries[0].stat().st_mtime_ns
+          def forbidden(*args, **kwargs):
+              raise AssertionError('Cached evaluation must not compile or probe')
+          extension._check_prerequisites = forbidden
+          extension._run_build_step = forbidden
+          sys.argv = ['tools/check_installation.py', '--smoke', '--out', str(root.parent / 'reports/cached.json')]
+          runpy.run_path('tools/check_installation.py', run_name='__main__')
+          assert libraries[0].stat().st_mtime_ns == before
+          PY
+      - name: Run native CPU numerical and source-build checks
+        run: |
+          uv run --no-sync pytest tests/native/cpu tests/native/shared/test_sampled_preparation.py tests/integration/test_cpu_classifier_reports.py tests/packaging/test_cpu_source_build.py tests/packaging/test_macos_source_build.py -m 'not gpu' -q
+          uv run --no-sync pytest tests/test_original_mle.py tests/test_xgboost_model.py -m 'not gpu' -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macos-arm64-source-torch${{ matrix.torch }}-python${{ matrix.python }}
+          path: |
+            ${{ runner.temp }}/reports/*.json
+            ${{ runner.temp }}/source-cpu-cache/**/*.log
+            ${{ runner.temp }}/source-cpu-cache/**/build.json
+
+  native-style:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned formatters
+        run: python -m pip install clang-format==18.1.8 ruff==0.15.16
+      - name: Check Python style
+        run: |
+          ruff check .
+          ruff format --check .
+      - name: Check C++ and CUDA formatting
+        run: |
+          find src/tabgen_eval/execution/csrc tests/native -type f \( -name '*.cpp' -o -name '*.cu' -o -name '*.h' -o -name '*.hpp' -o -name '*.cuh' -o -name '*.inc' \) -print0 | xargs -0 clang-format --dry-run --Werror
+
+  cpu-wheel:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: '3.10'
+            torch: '2.6.0'
+          - python: '3.11'
+            torch: '2.6.0'
+          - python: '3.13'
+            torch: '2.11.0'
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      UV_LINK_MODE: copy
+      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/tensor-build-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Create isolated builder
+        run: |
+          uv python install '${{ matrix.python }}'
+          uv venv --python '${{ matrix.python }}' '${{ runner.temp }}/builder'
+          uv pip install --python '${{ runner.temp }}/builder/bin/python' 'torch==${{ matrix.torch }}' --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python '${{ runner.temp }}/builder/bin/python' build 'hatchling>=1.27,<2' 'setuptools>=70'
+      - name: Build a wheel for this Torch ABI
+        run: |
+          '${{ runner.temp }}/builder/bin/python' tools/build_tensor_wheel.py --out dist
+      - name: Create fresh consumer and install wheel
+        run: |
+          uv venv --python '${{ matrix.python }}' '${{ runner.temp }}/consumer'
+          uv pip install --python '${{ runner.temp }}/consumer/bin/python' 'torch==${{ matrix.torch }}' --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python '${{ runner.temp }}/consumer/bin/python' dist/*.whl pytest hypothesis --extra-index-url https://download.pytorch.org/whl/cpu
+          uv pip check --python '${{ runner.temp }}/consumer/bin/python'
+      - name: Compiler-free installed reports and dependency fallbacks
+        env:
+          PYTHONPATH: ''
+          TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/empty-consumer-cache
+        run: |
+          cd '${{ runner.temp }}'
+          '${{ runner.temp }}/consumer/bin/python' '${{ github.workspace }}/tools/check_installation.py' --require-installed --without-compiler --out reports/cpu.json
+          '${{ runner.temp }}/consumer/bin/python' '${{ github.workspace }}/tools/check_installation.py' --require-installed --without-compiler --block-torch --out reports/no-torch.json
+          '${{ runner.temp }}/consumer/bin/python' '${{ github.workspace }}/tools/check_installation.py' --require-installed --without-compiler --block-triton --out reports/no-triton.json
+      - name: Installed CPU numerical and protocol suite
+        env:
+          PYTHONPATH: ''
+          CXX: /compiler-intentionally-unavailable
+        run: |
+          uv pip install --python '${{ runner.temp }}/consumer/bin/python' 'xgboost>=2.1'
+          '${{ runner.temp }}/consumer/bin/python' -c 'import xgboost'
+          '${{ runner.temp }}/consumer/bin/python' -m pytest tests/native/cpu tests/native/shared/test_sampled_preparation.py tests/contracts tests/integration/test_cpu_classifier_reports.py tests/packaging -m 'not gpu' -q
+          '${{ runner.temp }}/consumer/bin/python' -m pytest tests/test_original_mle.py tests/test_xgboost_model.py tests/preprocessing -m 'not gpu' -q
+      - name: Installed CPU Triton interpreter safety checks
+        if: matrix.python == '3.13'
+        env:
+          PYTHONPATH: ''
+          CUDA_VISIBLE_DEVICES: ''
+          CXX: /compiler-intentionally-unavailable
+          CC: /c-compiler-intentionally-unavailable
+        run: |
+          uv pip install --python '${{ runner.temp }}/consumer/bin/python' 'triton>=3.6,<3.7'
+          '${{ runner.temp }}/consumer/bin/python' -c 'import torch, triton'
+          '${{ runner.temp }}/consumer/bin/python' -m pytest tests/preprocessing/test_cuda_bounds_interpreter.py -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cpu-installation-torch${{ matrix.torch }}-python${{ matrix.python }}
+          path: |
+            dist/*.whl
+            ${{ runner.temp }}/reports/*.json
+
+  statistical-and-scale:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.run_slow)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/slow-cpu-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Install CPU test environment
+        run: |
+          uv python install '3.13'
+          uv venv --python '3.13'
+          uv pip install 'torch==2.11.0' --index-url https://download.pytorch.org/whl/cpu
+          uv pip install -e '.[arrow,xgboost]' pytest hypothesis
+      - name: Run statistical and scale suites
+        run: uv run --no-sync pytest -m 'calibration or perf' -q --durations=10 --junitxml='${{ runner.temp }}/slow-results.xml'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: statistical-and-scale-results
+          path: ${{ runner.temp }}/slow-results.xml
+
+  cuda-wheel:
+    # Hardware is never assumed available on GitHub-hosted runners. This lane
+    # requires an explicitly provisioned runner with an idle GPU and matching
+    # CUDA 13 developer headers (CUDA_HOME or TABGEN_EVAL_CUDA_INCLUDE).
+    if: github.event_name == 'workflow_dispatch' && inputs.run_cuda
+    runs-on: [self-hosted, linux, x64, cuda13]
+    timeout-minutes: 45
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      UV_LINK_MODE: copy
+      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/cpu-build-cache
+      TABGEN_EVAL_CUDA_CACHE: ${{ runner.temp }}/cuda-build-cache
+      CUDA_VISIBLE_DEVICES: ${{ vars.TABGEN_EVAL_CUDA_VISIBLE_DEVICES || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Create isolated CUDA builder
+        run: |
+          uv python install '3.13'
+          uv venv --python '3.13' '${{ runner.temp }}/builder'
+          uv pip install --python '${{ runner.temp }}/builder/bin/python' 'torch==2.11.0' --index-url https://download.pytorch.org/whl/cu130
+          uv pip install --python '${{ runner.temp }}/builder/bin/python' build 'hatchling>=1.27,<2' 'setuptools>=70'
+          '${{ runner.temp }}/builder/bin/python' -c 'import torch; assert torch.cuda.is_available(); assert torch.version.cuda == "13.0"; assert torch.cuda.device_count() == 1, "Configure one idle GPU with TABGEN_EVAL_CUDA_VISIBLE_DEVICES"'
+      - name: Build CPU and CUDA operators into wheel
+        run: |
+          '${{ runner.temp }}/builder/bin/python' tools/build_tensor_wheel.py --cuda --out dist
+      - name: Create fresh CUDA consumer and install wheel
+        run: |
+          uv venv --python '3.13' '${{ runner.temp }}/consumer'
+          uv pip install --python '${{ runner.temp }}/consumer/bin/python' 'torch==2.11.0' --index-url https://download.pytorch.org/whl/cu130
+          tensor_wheel=$(find dist -name '*.whl' -print -quit)
+          uv pip install --python '${{ runner.temp }}/consumer/bin/python' "${tensor_wheel}[cuda,xgboost-cuda,arrow]" pytest hypothesis --extra-index-url https://download.pytorch.org/whl/cu130
+          uv pip check --python '${{ runner.temp }}/consumer/bin/python'
+      - name: Require optional GPU engines before their numerical tests
+        run: |
+          '${{ runner.temp }}/consumer/bin/python' -c 'import cupy, pyarrow, torch, triton, xgboost; assert torch.cuda.is_available(); assert xgboost.build_info()["USE_CUDA"]'
+      - name: Compiler-free GPU full reports
+        env:
+          PYTHONPATH: ''
+          TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/empty-cpu-consumer-cache
+          TABGEN_EVAL_CUDA_CACHE: ${{ runner.temp }}/empty-cuda-consumer-cache
+          TRITON_CACHE_DIR: ${{ runner.temp }}/empty-triton-consumer-cache
+        run: |
+          cd '${{ runner.temp }}'
+          '${{ runner.temp }}/consumer/bin/python' '${{ github.workspace }}/tools/check_installation.py' --device cuda:0 --require-installed --without-compiler --large-auto --large-shape-auto --out reports/cuda.json
+          '${{ runner.temp }}/consumer/bin/python' '${{ github.workspace }}/tools/check_installation.py' --device cpu --require-installed --without-compiler --block-triton --out reports/cuda-no-triton.json
+      - name: Installed GPU numerical and protocol suite
+        env:
+          PYTHONPATH: ''
+          CXX: /compiler-intentionally-unavailable
+          CC: /c-compiler-intentionally-unavailable
+          CUDA_HOME: ''
+          TABGEN_EVAL_CUDA_INCLUDE: ''
+          TRITON_CACHE_DIR: ${{ runner.temp }}/empty-triton-consumer-cache
+        run: |
+          '${{ runner.temp }}/consumer/bin/python' -m pytest tests/native/cuda tests/native/shared/test_sampled_preparation.py tests/contracts tests/packaging tests/preprocessing -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cuda-installation-torch2.11-cu130-python3.13
+          path: |
+            dist/*.whl
+            ${{ runner.temp }}/reports/*.json

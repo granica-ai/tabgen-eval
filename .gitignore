@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+
+# Build artifacts
+dist/
+build/
+target/
+*.so
+docs/_build/
+docs/_generated/
+docs/source/_generated/
+
+# uv / venv
+.venv/
+

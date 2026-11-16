@@ -1,0 +1,154 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tabgen-eval"
+version = "0.1.0"
+description = "Evaluation of tabular generative models with fidelity, memorization, utility, and sampling uncertainty."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{ name = "Granica Research" }]
+keywords = ["synthetic-data", "tabular", "evaluation", "metrics", "bootstrap"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "numpy>=1.23",
+    "pandas>=1.5",
+    "pyarrow>=20",  # Parquet input and shared Arrow preparation
+    "scipy>=1.9",
+    "scikit-learn>=1.2",  # load_openml uses fetch_openml(parser=...), added in scikit-learn 1.2
+    "joblib>=1.1",  # process-parallel bootstrap (n_jobs); already a scikit-learn dependency
+    "plotly>=5.18",  # interactive report and distribution figures
+    "psutil>=5.9",  # portable available-memory observations for automatic planning
+    "xgboost>=2.1",  # predictive utility and nonlinear C2ST
+    "torch>=2.6",  # default tensor frontend; native binary wheels pin their Torch build
+]
+
+[project.optional-dependencies]
+datasets = []                       # load_openml uses scikit-learn's fetch_openml (core) — no extra deps
+torch = []                          # compatibility alias; PyTorch is a core dependency
+# CUDA execution checks independent minima: Torch 2.6, CUDA 11.8 and Triton 3.2.
+cuda = [
+    "torch>=2.6",
+    "triton>=3.2; sys_platform == 'linux'",
+    "setuptools>=70; sys_platform == 'linux'",  # Triton 3.2 runtime build tools
+]
+arrow = []                         # compatibility alias; PyArrow is a core dependency
+# GPU fitting and native categorical attribution validated on Python 3.10 with XGBoost 3.2.
+xgboost-cuda = [
+    "torch>=2.6",
+    "triton>=3.2; sys_platform == 'linux'",
+    "setuptools>=70; sys_platform == 'linux'",
+    "xgboost>=3.2",
+    "cupy-cuda12x>=13.6,<14; sys_platform == 'linux'",
+]
+xgboost = []                       # compatibility alias; XGBoost is a core dependency
+
+[project.scripts]
+tabgen-eval = "tabgen_eval.cli:main"
+
+[dependency-groups]
+# uv-managed dev tooling (not shipped in the wheel).
+docs = [
+    "sphinx>=8.2,<9",
+    "sphinx-book-theme>=1.1,<2",
+    "myst-parser>=4,<5",
+    "sphinx-copybutton>=0.5,<0.6",
+    "sphinx-design>=0.6,<0.7",
+    "sphinxcontrib-mermaid>=1,<3",
+]
+dev = [
+    "pytest>=7.4",
+    "hypothesis>=6.80",
+    "ruff>=0.4",
+    "pyright>=1.1.408",
+    "pandas-stubs>=2.2,<4",
+]
+
+[tool.uv.dependency-groups]
+docs = { requires-python = ">=3.11" }
+
+[project.urls]
+Homepage = "https://github.com/granica-ai/tabgen-eval"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tabgen_eval"]
+
+[tool.hatch.build]
+artifacts = [
+    "src/tabgen_eval/execution/csrc/**/*.cpp",
+    "src/tabgen_eval/execution/csrc/**/*.h",
+    "src/tabgen_eval/execution/csrc/**/*.hpp",
+    "src/tabgen_eval/execution/csrc/**/*.cuh",
+    "src/tabgen_eval/execution/csrc/**/*.inc",
+    "src/tabgen_eval/execution/csrc/**/*.cu",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["outputs/**", "examples/benchmark_sdmetrics_smote.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Default lane = fast tests; the slow statistical/scale layers run in the nightly lane via
+# `pytest -m "calibration or perf"`.
+addopts = "-m 'not calibration and not perf'"
+markers = [
+    "unit: fast unit tests",
+    "property: hypothesis property tests",
+    "metamorphic: metamorphic-relation tests",
+    "calibration: slow statistical-calibration tests",
+    "fuzz: adversarial/fuzz tests",
+    "perf: performance/scale tests",
+    "gpu: CUDA storage/execution tests (require a usable CUDA device)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.pyright]
+# Enforce the shared/public contracts first. Numerical backend modules import
+# generated native operators and optional dependencies; extend this list as
+# their boundary protocols become precise rather than suppressing diagnostics.
+include = [
+    "src/tabgen_eval/_typing.py",
+    "src/tabgen_eval/_validation.py",
+    "src/tabgen_eval/_options.py",
+    "src/tabgen_eval/data.py",
+    "src/tabgen_eval/evaluate.py",
+    "src/tabgen_eval/diagnostics/api.py",
+    "src/tabgen_eval/schema/schema.py",
+    "src/tabgen_eval/statistics",
+    "src/tabgen_eval/preprocessing/contracts.py",
+    "src/tabgen_eval/execution/torch/sources.py",
+    "src/tabgen_eval/execution/torch/tensors.py",
+    "src/tabgen_eval/cli.py",
+    "src/tabgen_eval/report/diagnostics.py",
+    "src/tabgen_eval/report/result.py",
+    "src/tabgen_eval/report/roles.py",
+    "src/tabgen_eval/report/rows.py",
+    "src/tabgen_eval/report/evaluation.py",
+    "src/tabgen_eval/report/assembly.py",
+    "src/tabgen_eval/registry",
+    "src/tabgen_eval/uncertainty/results.py",
+    "src/tabgen_eval/execution/runtime/components.py",
+    "src/tabgen_eval/execution/runtime/routing.py",
+    "src/tabgen_eval/execution/runtime/domains.py",
+    "src/tabgen_eval/execution/python/stats.py",
+]
+typeCheckingMode = "strict"
+# Match the development/CI interpreter and its selected dependency stubs.
+# Python 3.10 support is checked by Ruff's target and the runtime wheel matrix.
+pythonVersion = "3.13"
+venvPath = "."
+venv = ".venv"
