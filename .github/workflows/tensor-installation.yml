@@ -27,8 +27,9 @@ jobs:
     env:
       OMP_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
-      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/source-cpu-cache
     steps:
+      - name: Configure native CPU cache
+        run: echo "TABGEN_EVAL_CPU_CACHE=$RUNNER_TEMP/source-cpu-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Install Python, CPU Torch and supported CPU extras
@@ -60,8 +61,9 @@ jobs:
     env:
       OMP_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
-      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/source-cpu-cache
     steps:
+      - name: Configure native CPU cache
+        run: echo "TABGEN_EVAL_CPU_CACHE=$RUNNER_TEMP/source-cpu-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Install OpenMP and native arm64 Python dependencies
@@ -146,8 +148,9 @@ jobs:
       OMP_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
       UV_LINK_MODE: copy
-      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/tensor-build-cache
     steps:
+      - name: Configure native CPU cache
+        run: echo "TABGEN_EVAL_CPU_CACHE=$RUNNER_TEMP/tensor-build-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Create isolated builder
@@ -209,8 +212,9 @@ jobs:
     env:
       OMP_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
-      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/slow-cpu-cache
     steps:
+      - name: Configure native CPU cache
+        run: echo "TABGEN_EVAL_CPU_CACHE=$RUNNER_TEMP/slow-cpu-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Install CPU test environment
@@ -238,10 +242,12 @@ jobs:
       OMP_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
       UV_LINK_MODE: copy
-      TABGEN_EVAL_CPU_CACHE: ${{ runner.temp }}/cpu-build-cache
-      TABGEN_EVAL_CUDA_CACHE: ${{ runner.temp }}/cuda-build-cache
       CUDA_VISIBLE_DEVICES: ${{ vars.TABGEN_EVAL_CUDA_VISIBLE_DEVICES || '0' }}
     steps:
+      - name: Configure native CPU and CUDA caches
+        run: |
+          echo "TABGEN_EVAL_CPU_CACHE=$RUNNER_TEMP/cpu-build-cache" >> "$GITHUB_ENV"
+          echo "TABGEN_EVAL_CUDA_CACHE=$RUNNER_TEMP/cuda-build-cache" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Create isolated CUDA builder
