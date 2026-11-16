@@ -11,11 +11,13 @@ from collections import UserDict
 import numpy as np
 import pandas as pd
 import pytest
+from scipy.stats import ks_2samp
 
 import tabgen_eval
 from tabgen_eval import EvalData, Schema, UncertaintyOptions, evaluate
 from tabgen_eval._evaluation.estimator import _metric_seed
 from tabgen_eval._options import resolve_options
+from tabgen_eval.execution.runtime.sampling import fixed_draw
 from tests.support.evaluation import summaries
 
 pytestmark = pytest.mark.unit
@@ -107,21 +109,39 @@ def test_invalid_uncertainty_explains_contract_before_computation(
 
 
 @pytest.mark.parametrize("mode", ["reference", "candidate", "both"])
-def test_mode_only_uses_ten_replicates_and_preserves_point(data, mode):
+def test_mode_only_uses_ten_repetitions_and_reports_requested_means(data, mode):
     point = evaluate(data, metrics=["shape"])
     repeated = evaluate(data, metrics=["shape"], uncertainty={"mode": mode})
-    assert repeated["shape"].value == point["shape"].value
-    assert repeated["shape"].ideal == point["shape"].ideal
+    explicit = evaluate(data, metrics=["shape"], uncertainty={"mode": mode, "n_replicates": 10})
     assert repeated.options_dict["uncertainty"] == {"mode": mode, "n_replicates": 10}
+    score = repeated["shape"]
+    assert point["shape"].n_eff == score.n_eff == 50
     if mode in {"reference", "both"}:
-        assert len(repeated["shape"].reference_distribution.samples) == 10
+        samples = score.reference_distribution.samples
+        assert len(samples) == 10 and np.isfinite(samples).all()
+        assert score.ideal == pytest.approx(np.mean(samples))
+        assert score.ideal_estimate == "mean"
+        np.testing.assert_allclose(
+            [score.ideal_ci_low, score.ideal_ci_high], np.quantile(samples, [0.025, 0.975])
+        )
+        np.testing.assert_array_equal(samples, explicit["shape"].reference_distribution.samples)
     else:
-        assert repeated["shape"].reference_distribution is None
-        assert np.isnan(repeated["shape"].ideal_ci_low)
+        assert score.reference_distribution is None
+        assert score.ideal == point["shape"].ideal and score.ideal_estimate == "point"
+        assert np.isnan(score.ideal_ci_low) and np.isnan(score.ideal_ci_high)
     if mode in {"candidate", "both"}:
-        assert len(repeated["shape"].generated_distribution.samples) == 10
+        samples = score.generated_distribution.samples
+        assert len(samples) == 10 and np.isfinite(samples).all()
+        assert score.value == pytest.approx(np.mean(samples))
+        assert score.value_estimate == "mean"
+        np.testing.assert_allclose(
+            [score.ci_low, score.ci_high], np.quantile(samples, [0.025, 0.975])
+        )
+        np.testing.assert_array_equal(samples, explicit["shape"].generated_distribution.samples)
     else:
-        assert repeated["shape"].generated_distribution is None
+        assert score.generated_distribution is None
+        assert score.value == point["shape"].value and score.value_estimate == "point"
+        assert np.isnan(score.ci_low) and np.isnan(score.ci_high)
 
 
 def test_default_disables_distributions(data):
@@ -131,8 +151,10 @@ def test_default_disables_distributions(data):
     assert report["shape"].reference_distribution is None
 
 
-@pytest.mark.parametrize("generated_size", [40, 90])
-def test_candidate_interval_matches_both_without_reference_distribution(data, generated_size):
+@pytest.mark.parametrize("generated_size,n_res", [(40, 20), (90, 50)])
+def test_candidate_interval_matches_both_without_reference_distribution(
+    data, generated_size, n_res
+):
     data = EvalData(
         test=data.test, generated=data.generated.head(generated_size), schema=data.schema
     )
@@ -146,11 +168,26 @@ def test_candidate_interval_matches_both_without_reference_distribution(data, ge
         for mode in ("candidate", "both")
     }
     candidate, both = reports["candidate"]["shape"], reports["both"]["shape"]
-    assert candidate.value == both.value and candidate.ideal == both.ideal
+    assert candidate.n_eff == both.n_eff == n_res
+    assert candidate.value == both.value
+    assert candidate.value_estimate == both.value_estimate == "mean"
     np.testing.assert_array_equal(
         candidate.generated_distribution.samples, both.generated_distribution.samples
     )
+    assert candidate.value == pytest.approx(np.mean(candidate.generated_distribution.samples))
     assert (candidate.ci_low, candidate.ci_high) == (both.ci_low, both.ci_high)
+    draw = fixed_draw(len(data.test), len(data.generated), seed=42, uncertainty="candidate")
+    expected_reference = (
+        1
+        - ks_2samp(
+            data.test.iloc[draw.reference].x, data.test.iloc[draw.real_candidate].x
+        ).statistic
+    )
+    assert candidate.ideal == pytest.approx(expected_reference)
+    assert candidate.ideal_estimate == "point"
+    assert both.ideal_estimate == "mean"
+    assert len(both.reference_distribution.samples) == 4
+    assert both.ideal == pytest.approx(np.mean(both.reference_distribution.samples))
     assert candidate.reference_distribution is None
     assert np.isnan(candidate.ideal_ci_low) and np.isnan(candidate.ideal_ci_high)
     payload = json.loads(reports["candidate"].to_json(include_replicates=True))

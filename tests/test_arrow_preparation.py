@@ -298,6 +298,9 @@ def test_evaluation_fallbacks_preserve_supplied_values(monkeypatch, route):
     from tests.support.evaluation import paired_report as evaluate
 
     real = pd.DataFrame({"c": [" 1.0 ", "01", None] * 50})
+    if route == "no_arrow":
+        # Pandas's Arrow-backed strings need PyArrow independently of our packer.
+        real["c"] = real["c"].astype(object)
     expected = real.copy(deep=True)
     schema = Schema(categorical=["c"])
     options = make_options(device="cpu")
@@ -325,8 +328,8 @@ def test_evaluation_fallbacks_preserve_supplied_values(monkeypatch, route):
     pd.testing.assert_frame_equal(real, expected)
 
 
-def test_missing_arrow_module_preserves_existing_arrow_backed_input(monkeypatch):
-    import sys
+def test_unavailable_arrow_packing_preserves_existing_arrow_backed_input(monkeypatch):
+    import builtins
 
     from tabgen_eval import EvalData, evaluate
 
@@ -339,7 +342,19 @@ def test_missing_arrow_module_preserves_existing_arrow_backed_input(monkeypatch)
         }
     )
     before = frame.copy(deep=True)
-    monkeypatch.setitem(sys.modules, "pyarrow", None)
+    original_import = builtins.__import__
+    blocked = []
+
+    def without_arrow_packing(name, globals=None, locals=None, fromlist=(), level=0):
+        if name == "pyarrow" and (globals or {}).get("__name__") == (
+            "tabgen_eval.preprocessing.arrow"
+        ):
+            blocked.append(name)
+            raise ModuleNotFoundError("Arrow packing is unavailable", name="pyarrow")
+        return original_import(name, globals, locals, fromlist, level)
+
+    # Disable the package's Arrow packing route, preserving Pandas's imports.
+    monkeypatch.setattr(builtins, "__import__", without_arrow_packing)
     report = evaluate(
         EvalData(
             test=frame, generated=frame.copy(), schema=Schema(numeric=["x"], categorical=["c"])
@@ -348,6 +363,7 @@ def test_missing_arrow_module_preserves_existing_arrow_backed_input(monkeypatch)
         device="cpu",
         uncertainty=None,
     )
+    assert blocked
     assert np.isfinite(report["shape"].value)
     pd.testing.assert_frame_equal(frame, before)
 
