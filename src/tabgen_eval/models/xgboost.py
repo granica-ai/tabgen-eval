@@ -156,6 +156,9 @@ class XGBoostModel:
             tree_method="hist",
             n_jobs=fit_threads,
             random_state=int(seed % (2**32 - 1)),
+            # No eval_set is supplied. Avoid unused multiclass metrics probing
+            # CUDA even when the selected training device is CPU.
+            disable_default_eval_metric=True,
         )
         if metadata:
             model_options.update(

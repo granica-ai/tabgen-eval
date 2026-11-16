@@ -196,7 +196,8 @@ def test_mixed_target_diagnostics_and_paired_replicates_preserve_identities():
         info = report.results[0].diagnostics
         assert np.isfinite(report["mle/ratio"].value)
         assert report["mle/ratio"].generated_distribution.finite_count == 2
-        for outcome in [info["point"], *info["replicates"]]:
+        assert info["point"] == {} and len(info["replicates"]) == 2
+        for outcome in info["replicates"]:
             for fit in outcome["diagnostics"]["fits"].values():
                 assert {(type(value), value) for value in fit["classes"]} == expected
             assert all(count < 128 for count in outcome["diagnostics"]["usable_rows"].values())

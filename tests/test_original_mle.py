@@ -100,7 +100,13 @@ def test_scores_match_independent_default_xgboost_fits(xgb, task):
         info = outcome.diagnostics["fits"][key]
         is_regression = task == "regression"
         cls = xgb.XGBRegressor if is_regression else xgb.XGBClassifier
-        model = cls(device="cpu", tree_method="hist", n_jobs=1, random_state=info["random_state"])
+        model = cls(
+            device="cpu",
+            tree_method="hist",
+            n_jobs=1,
+            random_state=info["random_state"],
+            disable_default_eval_metric=True,
+        )
         assert model.early_stopping_rounds is None
         if is_regression:
             y, truth = training.y, test.y
@@ -163,15 +169,21 @@ def test_constant_scoring_target_has_valid_mae_and_explicit_zero_reference_ratio
     np.testing.assert_array_equal(raw.generated_distribution.samples, [generated_target] * 2)
     np.testing.assert_array_equal(raw.reference_distribution.samples, [0.0] * 2)
     assert "NAN_VALUE" not in raw.flag_codes
-    reason = report.results[0].diagnostics["point"]["reason"]
+    diagnostics = report.results[0].diagnostics
+    assert diagnostics["point"] == {} and len(diagnostics["replicates"]) == 2
+    reasons = [replicate["reason"] for replicate in diagnostics["replicates"]]
+    assert np.isnan(ratio.value)
+    assert "NAN_VALUE" in ratio.flag_codes
     if generated_target == 0:
-        assert np.isnan(ratio.value)
-        assert "NAN_VALUE" in ratio.flag_codes
-        assert reason == "zero generated and reference scores"
+        assert reasons == ["zero generated and reference scores"] * 2
+        assert np.isnan(ratio.generated_distribution.samples).all()
+        assert ratio.generated_distribution.discarded_reasons == {
+            "zero generated and reference scores": 2
+        }
     else:
-        assert np.isposinf(ratio.value)
-        assert "NAN_VALUE" not in ratio.flag_codes
-        assert reason is None
+        assert reasons == [None] * 2
+        assert np.isposinf(ratio.generated_distribution.samples).all()
+        assert ratio.generated_distribution.discarded_reasons == {"infinite_ratio": 2}
     assert np.isnan(ratio.ci_low)
     assert ratio.generated_distribution.unavailable_count == 2
 
@@ -252,8 +264,10 @@ def test_failed_native_fits_are_flagged_and_excluded_from_intervals(xgb, monkeyp
     )
     assert all(
         f["reason"] == "xgboost_fit_failed" and f["error"] == "simulated utility failure"
-        for f in diag["point"]["diagnostics"]["fits"].values()
+        for rep in diag["replicates"]
+        for f in rep["diagnostics"]["fits"].values()
     )
+    assert diag["point"] == {} and len(diag["replicates"]) == 2
 
 
 def test_mle_uses_shared_native_predictor_preparation(xgb, monkeypatch):
@@ -327,7 +341,7 @@ def test_mle_accepts_selected_precision_and_device(xgb, monkeypatch, torch, devi
         metrics=["mle"],
         options=make_options(device=device, dtype=dtype, uncertainty="both", n_replicates=2),
     )
-    assert len(calls) == 6
+    assert len(calls) == 4
     assert np.isfinite(report["mle/score"].value)
     assert report.provenance["metric_execution"]["mle"]["device"] == device
 
@@ -347,7 +361,7 @@ def test_original_mle_preserves_typed_target_categories(xgb):
 
 
 @pytest.mark.parametrize("task", ["classification", "regression"])
-def test_mle_point_is_fixed_and_repetitions_use_raw_paired_bands(xgb, task):
+def test_mle_repetition_means_use_raw_paired_bands(xgb, task):
     real, fake, schema = data(task)
     point = evaluate(real, fake, schema, metrics=["mle"], options=make_options(seed=9))
     report = evaluate(
@@ -363,11 +377,13 @@ def test_mle_point_is_fixed_and_repetitions_use_raw_paired_bands(xgb, task):
     )
     for name in ["score", "ratio"]:
         raw = report[f"mle/{name}"]
-        assert raw.value == point[f"mle/{name}"].value
         samples = raw.generated_distribution.samples
+        assert raw.value == pytest.approx(np.mean(samples))
+        assert raw.value_estimate == "mean"
         np.testing.assert_equal([raw.ci_low, raw.ci_high], np.quantile(samples, [0.025, 0.975]))
     raw, ratio = report["mle/score"], report["mle/ratio"]
-    assert raw.ideal == point["mle/score"].ideal
+    assert raw.ideal == pytest.approx(np.mean(raw.reference_distribution.samples))
+    assert raw.ideal_estimate == "mean"
     assert raw.n_eff == 160 and ratio.target == 1
 
     np.testing.assert_equal(
@@ -414,12 +430,12 @@ def test_fresh_pools_have_no_replacement_and_share_shape_sampling(xgb, monkeypat
     cfg = make_options(uncertainty="both", n_replicates=3, seed=17)
     report = evaluate(real, fake, schema, metrics=["shape", "mle"], options=cfg)
     draw = fixed_draw(500, 500, seed=17)
-    expected = [(draw.reference, draw.real_candidate, draw.generated)]
+    expected = []
     for batch in paired_draw_batches(
         draw, n_replicates=3, seed=17, batch_size=1, include_generated=True
     ):
         expected.append((batch.reference[0], batch.real_candidate[0], batch.generated[0]))
-    assert len(calls) == 8
+    assert len(calls) == 6
     for (generated_fit, baseline_fit), (scoring, baseline, candidate) in zip(
         zip(calls[::2], calls[1::2], strict=True),
         expected,
@@ -463,7 +479,7 @@ def test_reference_mode_only_refits_baseline_and_matches_both_mode(xgb, monkeypa
             n_replicates=3,
         ),
     )
-    assert len(calls) == 5  # two point fits and three real-trained fits
+    assert len(calls) == 4  # one generated fit reused for three real-trained comparisons
     both = evaluate(
         real,
         fake,
@@ -475,8 +491,9 @@ def test_reference_mode_only_refits_baseline_and_matches_both_mode(xgb, monkeypa
         ),
     )
     for name in ["score", "ratio"]:
-        assert reference[f"mle/{name}"].value == both[f"mle/{name}"].value
-        assert reference[f"mle/{name}"].generated_distribution is not None
+        for report in [reference, both]:
+            stat = report[f"mle/{name}"]
+            assert stat.value == pytest.approx(np.mean(stat.generated_distribution.samples))
     np.testing.assert_equal(
         reference["mle/score"].reference_distribution.samples,
         both["mle/score"].reference_distribution.samples,
@@ -509,7 +526,7 @@ def test_repetition_prefix_parallelism_and_metric_order_are_deterministic(xgb):
         first = reports[0][f"mle/{name}"]
         for report in reports[1:]:
             actual = report[f"mle/{name}"]
-            assert actual.value == first.value
+            assert actual.value == pytest.approx(np.mean(actual.generated_distribution.samples))
             np.testing.assert_equal(
                 actual.generated_distribution.samples[:2], first.generated_distribution.samples
             )
