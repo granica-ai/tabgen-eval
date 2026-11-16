@@ -159,6 +159,7 @@ jobs:
           uv venv --python '${{ matrix.python }}' '${{ runner.temp }}/builder'
           uv pip install --python '${{ runner.temp }}/builder/bin/python' 'torch==${{ matrix.torch }}' --index-url https://download.pytorch.org/whl/cpu
           uv pip install --python '${{ runner.temp }}/builder/bin/python' build 'hatchling>=1.27,<2' 'setuptools>=70'
+          uv pip install --python '${{ runner.temp }}/builder/bin/python' -e .
       - name: Build a wheel for this Torch ABI
         run: |
           '${{ runner.temp }}/builder/bin/python' tools/build_tensor_wheel.py --out dist
@@ -256,6 +257,7 @@ jobs:
           uv venv --python '3.13' '${{ runner.temp }}/builder'
           uv pip install --python '${{ runner.temp }}/builder/bin/python' 'torch==2.11.0' --index-url https://download.pytorch.org/whl/cu130
           uv pip install --python '${{ runner.temp }}/builder/bin/python' build 'hatchling>=1.27,<2' 'setuptools>=70'
+          uv pip install --python '${{ runner.temp }}/builder/bin/python' -e .
           '${{ runner.temp }}/builder/bin/python' -c 'import torch; assert torch.cuda.is_available(); assert torch.version.cuda == "13.0"; assert torch.cuda.device_count() == 1, "Configure one idle GPU with TABGEN_EVAL_CUDA_VISIBLE_DEVICES"'
       - name: Build CPU and CUDA operators into wheel
         run: |
