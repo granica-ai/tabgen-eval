@@ -203,7 +203,8 @@ class MLE(Metric):
         predictors = tuple(c for c in schema.categorical if c != schema.target)
         groups = (
             max(int(baseline[schema.target].nunique()), int(candidate[schema.target].nunique()))
-            if self._resolved_task == "classification" else 1
+            if self._resolved_task == "classification"
+            else 1
         )
         device = select_device(
             self,

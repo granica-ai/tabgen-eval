@@ -61,9 +61,7 @@ def mean_estimates_figure(data):
     report = Report(
         results=results,
         schema_dict={"numeric": data["population"]["columns"]},
-        options_dict={
-            "uncertainty": {"mode": "both", "n_replicates": sample["n_replicates"]}
-        },
+        options_dict={"uncertainty": {"mode": "both", "n_replicates": sample["n_replicates"]}},
     )
     figure = report.fidelity.plot(kind="scores", metrics=["shape", "trend"])
     roles = (("reference", "Real–real"), ("generated", "Generated–real"))
@@ -108,9 +106,7 @@ def mean_estimates_figure(data):
             col=col,
         )
         padding = max((max(extents) - min(extents)) * 0.08, 0.0003)
-        figure.update_xaxes(
-            range=[min(extents) - padding, max(extents) + padding], row=1, col=col
-        )
+        figure.update_xaxes(range=[min(extents) - padding, max(extents) + padding], row=1, col=col)
     return figure, pd.DataFrame(records).round(6)
 
 

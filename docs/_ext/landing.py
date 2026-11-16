@@ -88,9 +88,10 @@ def _latency_figure(benchmark):
     values = [mean(timings[key]) for key in configurations]
     baseline = mean(timings["python_cpu"])
     bar_labels = [
-        f"{value:.2f} s" if key == "python_cpu"
+        f"{value:.2f} s"
+        if key == "python_cpu"
         else f"<b>{baseline / value:.1f}x faster</b><br>{value:.2f} s"
-        for key, value in zip(configurations, values)
+        for key, value in zip(configurations, values, strict=False)
     ]
     figure = go.Figure(
         go.Bar(
@@ -161,14 +162,12 @@ def _speedup_figure(latency_figure):
     bars.y = speedups
     bars.text = [
         f"<b>{'1x' if value == 1 else f'{value:.1f}x'}</b><br>{elapsed:.2f} s"
-        for value, elapsed in zip(speedups, seconds)
+        for value, elapsed in zip(speedups, seconds, strict=False)
     ]
     bars.hovertemplate = "%{x}<br>Speedup vs. Python CPU: %{y:.1f}x<extra></extra>"
     figure.update_layout(title_text="Speedup relative to Python CPU")
     figure.update_yaxes(range=[0, max(speedups) * 1.18], ticksuffix="x")
-    table = pd.DataFrame(
-        {"Execution": list(bars.x), "Speedup vs. Python CPU": speedups}
-    )
+    table = pd.DataFrame({"Execution": list(bars.x), "Speedup vs. Python CPU": speedups})
     return figure, table
 
 

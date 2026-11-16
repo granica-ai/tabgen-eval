@@ -4,8 +4,16 @@ from html import escape
 
 
 def write_figure(
-    output, name, figure, description, table, *, figure_id, table_caption=None,
-    show_values=True, static_plot=False
+    output,
+    name,
+    figure,
+    description,
+    table,
+    *,
+    figure_id,
+    table_caption=None,
+    show_values=True,
+    static_plot=False,
 ):
     """Embed an offline figure with an accessible description and source values."""
     chart = figure.to_html(

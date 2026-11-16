@@ -88,9 +88,7 @@ def test_cached_classifier_sources_are_not_reserved_again(monkeypatch):
     monkeypatch.setattr(
         session,
         "_workload",
-        lambda metric: SimpleNamespace(
-            **vars(workload), persistent_bytes=lambda dtype: 12 * GIB
-        ),
+        lambda metric: SimpleNamespace(**vars(workload), persistent_bytes=lambda dtype: 12 * GIB),
     )
     forest = session.context_for(NonLinearC2ST(device="cpu"))
     assert forest.reference is linear.reference
