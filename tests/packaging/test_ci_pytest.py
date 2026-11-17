@@ -63,6 +63,24 @@ def test_fatal_signal_maps_to_shell_status_and_keeps_trace(runner, capsys):
     assert "::error::pytest exited 139; trace 1/1%0AFatal Python error:" in output
 
 
+@pytest.mark.parametrize("prefix", ["", ".."])
+def test_first_fatal_trace_survives_recursive_abort(runner, capsys, prefix):
+    script = (
+        f"print({prefix!r} + 'Fatal Python error: Segmentation fault', flush=True); "
+        "print('first_test_frame', flush=True); "
+        "print('Fatal Python error: Aborted', flush=True); "
+        "print('recursive_abort_frame', flush=True); "
+        "raise SystemExit(139)"
+    )
+    assert runner["run"]([sys.executable, "-c", script]) == 139
+    output = capsys.readouterr().out
+    assert output.startswith(prefix + "Fatal Python error: Segmentation fault\n")
+    annotations = [line for line in output.splitlines() if line.startswith("::error::")]
+    assert len(annotations) == 1
+    assert "trace 1/1%0AFatal Python error: Segmentation fault%0Afirst_test_frame" in annotations[0]
+    assert annotations[0].index("Segmentation fault") < annotations[0].index("Aborted")
+
+
 def test_trace_annotations_stay_within_runner_limits(runner, capsys):
     script = (
         "print('Fatal Python error: simulated failure', flush=True); "

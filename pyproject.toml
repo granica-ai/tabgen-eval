@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tabgen-eval"
-version = "0.1.0"
+version = "0.1.1"
 description = "Evaluation of tabular generative models with fidelity, memorization, utility, and sampling uncertainty."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -28,6 +28,7 @@ dependencies = [
     "psutil>=5.9",  # portable available-memory observations for automatic planning
     "xgboost>=2.1",  # predictive utility and nonlinear C2ST
     "torch>=2.6",  # default tensor frontend; native binary wheels pin their Torch build
+    "torch<2.11; sys_platform == 'darwin'",  # avoid conflicting macOS OpenMP runtimes with XGBoost
     "setuptools>=70",  # torch.utils.cpp_extension imports it for CPU source builds
 ]
 

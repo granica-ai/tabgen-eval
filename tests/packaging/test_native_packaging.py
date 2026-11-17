@@ -23,6 +23,38 @@ except ModuleNotFoundError:  # Python 3.10; pytest supplies tomli there.
 from tabgen_eval.execution.torch import binary as native_binary
 
 
+@pytest.mark.parametrize("extra", [None, "cuda", "xgboost-cuda"])
+@pytest.mark.parametrize(
+    "platform,torch_version,supported",
+    [
+        ("linux", "2.5.0", False),
+        ("linux", "2.6.0", True),
+        ("linux", "2.10.0", True),
+        ("linux", "2.11.0", True),
+        ("darwin", "2.5.0", False),
+        ("darwin", "2.6.0", True),
+        ("darwin", "2.10.0", True),
+        ("darwin", "2.11.0", False),
+    ],
+)
+def test_torch_requirements_combine_core_platform_and_extras(
+    checkout_root, extra, platform, torch_version, supported
+):
+    project = tomllib.loads((checkout_root / "pyproject.toml").read_text())["project"]
+    dependencies = list(project["dependencies"])
+    if extra is not None:
+        dependencies.extend(project["optional-dependencies"][extra])
+    environment = {"sys_platform": platform, "extra": extra or ""}
+    requirements = [
+        requirement
+        for requirement in map(Requirement, dependencies)
+        if requirement.name == "torch"
+        and (requirement.marker is None or requirement.marker.evaluate(environment))
+    ]
+    assert requirements
+    assert all(torch_version in requirement.specifier for requirement in requirements) is supported
+
+
 @pytest.mark.parametrize("extra", ["cuda", "xgboost-cuda"])
 @pytest.mark.parametrize(
     "torch_version,cuda_version,triton_version",
@@ -202,8 +234,9 @@ def test_release_rpaths_are_relative():
 
 
 @pytest.mark.parametrize("bundle_host", [False, True])
+@pytest.mark.parametrize("darwin_constraint", [False, True])
 def test_repacked_wheel_has_integral_record_and_exact_torch_dependency(
-    tmp_path, packaged, bundle_host, checkout_root
+    tmp_path, packaged, bundle_host, darwin_constraint, checkout_root
 ):
     script = checkout_root / "tools" / "build_tensor_wheel.py"
     spec = importlib.util.spec_from_file_location("build_tensor_wheel", script)
@@ -211,11 +244,16 @@ def test_repacked_wheel_has_integral_record_and_exact_torch_dependency(
     spec.loader.exec_module(module)
     base = tmp_path / "tabgen_eval-0.1.0-py3-none-any.whl"
     info = "tabgen_eval-0.1.0.dist-info"
+    platform_dependency = 'Requires-Dist: torch<2.11; sys_platform == "darwin"\n'
+    metadata = (
+        "Metadata-Version: 2.4\nName: tabgen-eval\nVersion: 0.1.0\n"
+        "Requires-Dist: torch>=2.6\n"
+        + (platform_dependency if darwin_constraint else "")
+        + 'Requires-Dist: torch>=2.6; extra == "cuda"\n'
+        "Requires-Dist: numpy>=1.23\n\nDescription\n"
+    )
     with zipfile.ZipFile(base, "w") as archive:
-        archive.writestr(
-            f"{info}/METADATA",
-            'Metadata-Version: 2.4\nName: tabgen-eval\nVersion: 0.1.0\nRequires-Dist: torch>=2.6\nRequires-Dist: torch>=2.6; extra == "cuda"\nRequires-Dist: numpy>=1.23\n\nDescription\n',
-        )
+        archive.writestr(f"{info}/METADATA", metadata)
         archive.writestr(
             f"{info}/WHEEL", "Wheel-Version: 1.0\nRoot-Is-Purelib: true\nTag: py3-none-any\n"
         )
@@ -249,9 +287,31 @@ def test_repacked_wheel_has_integral_record_and_exact_torch_dependency(
                 archive.read(f"tabgen_eval/execution/{source}") == f"// packaged {source}".encode()
             )
         metadata = archive.read(f"{info}/METADATA").decode()
-        assert metadata.count("Requires-Dist: torch") == 2
+        assert metadata.count("Requires-Dist: torch") == 2 + darwin_constraint
         assert "Requires-Dist: torch==2.11.0" in metadata
         assert 'Requires-Dist: torch>=2.6; extra == "cuda"' in metadata
+        assert (platform_dependency in metadata) is darwin_constraint
+        requirements = [
+            Requirement(line.removeprefix("Requires-Dist: "))
+            for line in metadata.split("\n\n", 1)[0].splitlines()
+            if line.startswith("Requires-Dist: ")
+        ]
+        for extra in ("", "cuda"):
+            active_torch = [
+                requirement
+                for requirement in requirements
+                if requirement.name == "torch"
+                and (
+                    requirement.marker is None
+                    or requirement.marker.evaluate({"sys_platform": "linux", "extra": extra})
+                )
+            ]
+            assert active_torch
+            assert all("2.11.0" in requirement.specifier for requirement in active_torch)
+            for other_version in ("2.10.0", "2.12.0"):
+                assert not all(
+                    other_version in requirement.specifier for requirement in active_torch
+                )
         assert "Requires-Dist: numpy>=1.23" in metadata
         wheel_tags = archive.read(f"{info}/WHEEL").decode()
         assert "linux_" in wheel_tags

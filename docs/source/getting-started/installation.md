@@ -67,6 +67,11 @@ For cache configuration, see {ref}`CPU build cache <cpu-build-cache>`.
 (macos-cpu-installation)=
 ## Apple Silicon macOS CPU Installation
 
+On macOS, TabGenEval requires PyTorch `>=2.6,<2.11`; the package installer
+selects a compatible version automatically. PyTorch 2.11 and later can load an
+OpenMP runtime that conflicts with XGBoost and causes a segmentation fault.
+See the [upstream OpenMP issue](https://github.com/pytorch/pytorch/issues/191933).
+
 Install Apple's Command Line Tools and OpenMP with [Homebrew](https://brew.sh/):
 
 ```bash

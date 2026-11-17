@@ -54,19 +54,10 @@ jobs:
         include:
           - python: '3.11'
             torch: '2.6.0'
-            xgboost: 'latest'
-          - python: '3.13'
-            torch: '2.11.0'
-            xgboost: 'latest'
-          - python: '3.13'
-            torch: 'latest'
-            xgboost: 'latest'
           - python: '3.13'
             torch: '2.10.0'
-            xgboost: 'latest'
           - python: '3.13'
-            torch: '2.11.0'
-            xgboost: '3.2.0'
+            torch: 'latest-compatible'
     env:
       OMP_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
@@ -80,15 +71,10 @@ jobs:
           brew install libomp
           uv python install '${{ matrix.python }}'
           uv venv --python '${{ matrix.python }}'
-          if [ '${{ matrix.torch }}' = 'latest' ]; then
-            uv pip install torch
-          else
+          if [ '${{ matrix.torch }}' != 'latest-compatible' ]; then
             uv pip install 'torch==${{ matrix.torch }}'
           fi
           uv pip install -e '.[arrow]' pytest hypothesis
-          if [ '${{ matrix.xgboost }}' != 'latest' ]; then
-            uv pip install 'xgboost==${{ matrix.xgboost }}'
-          fi
           uv run --no-sync python -c 'import platform, torch; assert platform.machine() == "arm64"; assert torch.version.cuda is None'
       - name: Compile automatically through public CPU evaluation
         run: uv run --no-sync python tools/check_installation.py --smoke --out '${{ runner.temp }}/reports/first.json'
@@ -119,7 +105,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: macos-arm64-source-torch${{ matrix.torch }}-python${{ matrix.python }}-xgboost${{ matrix.xgboost }}
+          name: macos-arm64-source-torch${{ matrix.torch }}-python${{ matrix.python }}
           path: |
             ${{ runner.temp }}/reports/*.json
             ${{ runner.temp }}/source-cpu-cache/**/*.log

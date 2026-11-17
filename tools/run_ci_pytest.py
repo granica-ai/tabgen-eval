@@ -45,8 +45,9 @@ def run(command: list[str], *, versions: str = "") -> int:
         for line in process.stdout:
             print(line, end="", flush=True)
             tail = (tail + line)[-65536:]
-            if line.startswith("Fatal Python error:"):
-                fatal_trace = line[:TRACE_LIMIT]
+            fatal_start = line.find("Fatal Python error:")
+            if fatal_start >= 0 and not fatal_trace:
+                fatal_trace = line[fatal_start:][:TRACE_LIMIT]
                 recording_fatal = True
             elif recording_fatal:
                 if line.startswith("Extension modules:"):
