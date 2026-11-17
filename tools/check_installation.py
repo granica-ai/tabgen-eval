@@ -175,9 +175,18 @@ def main():
             payload = json.loads(saga_report.to_json(include_replicates=True))
             diagnostics = payload["provenance"]["classifier_diagnostics"]["linear_c2st"]
             for comparison in ("generated", "real_reference"):
-                folds = diagnostics["point"][comparison]["folds"]
-                assert folds and all(fold["solver"] == "sketchysaga" for fold in folds), diagnostics
-                assert all("converged" in fold and "reason" in fold for fold in folds)
+                fits = (
+                    diagnostics["replicates"][comparison]
+                    if bootstrap
+                    else [diagnostics["point"][comparison]]
+                )
+                assert len(fits) == (bootstrap or 1), diagnostics
+                for fit in fits:
+                    folds = fit["folds"]
+                    assert folds and all(fold["solver"] == "sketchysaga" for fold in folds), (
+                        diagnostics
+                    )
+                    assert all("converged" in fold and "reason" in fold for fold in folds)
             assert np.isfinite(saga_report["linear_c2st/auc"].value)
             results.append({"case": "torch_sketchysaga", "bootstrap": bootstrap, "report": payload})
 
