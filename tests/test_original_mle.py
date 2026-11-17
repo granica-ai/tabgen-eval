@@ -14,6 +14,7 @@ from tabgen_eval import Schema, list_metrics
 from tabgen_eval._evaluation.estimator import Estimator
 from tabgen_eval.execution.runtime.dispatch import supports
 from tabgen_eval.metrics import MLE, Direction
+from tabgen_eval.models import XGBoostModel
 from tabgen_eval.models.errors import FitUnavailable
 from tabgen_eval.preprocessing.predictors import predictor_design
 from tabgen_eval.schema.validate import ValidationError
@@ -26,7 +27,12 @@ pytestmark = pytest.mark.unit
 
 @pytest.fixture
 def xgb():
-    return pytest.importorskip("xgboost", minversion="2.1")
+    try:
+        return XGBoostModel.load_backend()
+    except ModuleNotFoundError as error:
+        if error.name != "xgboost":
+            raise
+        pytest.skip(str(error))
 
 
 def data(task="classification", n=320):

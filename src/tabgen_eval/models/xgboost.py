@@ -10,6 +10,7 @@ from __future__ import annotations
 import importlib
 import json
 import re
+import sys
 from collections.abc import Sequence
 from numbers import Integral
 from types import ModuleType
@@ -96,6 +97,12 @@ class XGBoostModel:
         This can be called before data checks so a missing installation remains
         distinct from a statistically noncomputable fit.
         """
+        if sys.platform == "darwin":
+            # Torch must load its OpenMP runtime before XGBoost can resolve
+            # Homebrew's separate runtime (dmlc/xgboost#11500).
+            from tabgen_eval.execution.torch.tensors import torch_module
+
+            torch_module(required=False)
         try:
             xgb = importlib.import_module("xgboost")
         except ModuleNotFoundError as error:

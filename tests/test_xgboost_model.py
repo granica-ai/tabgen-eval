@@ -2,6 +2,13 @@
 
 from __future__ import annotations
 
+import os
+import subprocess
+import sys
+import textwrap
+from pathlib import Path
+from types import ModuleType
+
 import numpy as np
 import pytest
 from sklearn.exceptions import NotFittedError
@@ -14,7 +21,123 @@ pytestmark = pytest.mark.unit
 
 @pytest.fixture
 def xgb():
-    return pytest.importorskip("xgboost", minversion="2.1")
+    try:
+        return XGBoostModel.load_backend()
+    except ModuleNotFoundError as error:
+        if error.name != "xgboost":
+            raise
+        pytest.skip(str(error))
+
+
+@pytest.mark.parametrize("platform", ["darwin", "linux", "win32"])
+def test_backend_orders_macos_openmp_imports_without_cuda_probes(monkeypatch, platform):
+    from tabgen_eval.models import xgboost as adapter
+
+    calls = []
+    engine = ModuleType("xgboost")
+    engine.__version__ = "2.1.0"
+
+    def load(name):
+        calls.append(name)
+        return ModuleType("torch") if name == "torch" else engine
+
+    monkeypatch.setattr(adapter.sys, "platform", platform)
+    monkeypatch.setattr(adapter.importlib, "import_module", load)
+    assert XGBoostModel.load_backend() is engine
+    assert calls == (["torch", "xgboost"] if platform == "darwin" else ["xgboost"])
+
+
+def test_macos_numpy_backend_allows_absent_torch(monkeypatch):
+    from tabgen_eval.models import xgboost as adapter
+
+    calls = []
+    engine = ModuleType("xgboost")
+    engine.__version__ = "2.1.0"
+
+    def load(name):
+        calls.append(name)
+        if name == "torch":
+            raise ModuleNotFoundError("Torch is absent", name="torch")
+        return engine
+
+    monkeypatch.setattr(adapter.sys, "platform", "darwin")
+    monkeypatch.setattr(adapter.importlib, "import_module", load)
+    assert XGBoostModel.load_backend() is engine
+    assert calls == ["torch", "xgboost"]
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        ModuleNotFoundError("Broken Torch dependency", name="torch._C"),
+        RuntimeError("Broken Torch runtime"),
+    ],
+)
+def test_macos_backend_propagates_broken_torch(monkeypatch, error):
+    from tabgen_eval.models import xgboost as adapter
+
+    calls = []
+
+    def load(name):
+        calls.append(name)
+        raise error
+
+    monkeypatch.setattr(adapter.sys, "platform", "darwin")
+    monkeypatch.setattr(adapter.importlib, "import_module", load)
+    with pytest.raises(type(error), match="Broken Torch"):
+        XGBoostModel.load_backend()
+    assert calls == ["torch"]
+
+
+@pytest.mark.skipif(sys.platform != "darwin", reason="Requires real macOS OpenMP runtimes")
+def test_macos_backend_linalg_and_repeated_fits_in_fresh_process(tmp_path):
+    import tabgen_eval
+
+    script = textwrap.dedent(
+        """
+        import json
+        import numpy as np
+        from tabgen_eval.models import XGBoostModel
+
+        XGBoostModel.load_backend()
+        import torch
+        from threadpoolctl import threadpool_info
+
+        torch.set_num_threads(2)
+        print(json.dumps({"openmp": [
+            runtime for runtime in threadpool_info()
+            if runtime.get("internal_api") == "openmp"
+        ]}), flush=True)
+        rng = np.random.default_rng(47)
+        features = rng.normal(size=(128, 3))
+        labels = features[:, 0] + 0.5 * features[:, 1]
+        for seed in range(4):
+            matrix = torch.tensor([[2.0, 0.5], [0.5, 1.0]], dtype=torch.float64)
+            factor = torch.linalg.cholesky(matrix)
+            torch.testing.assert_close(factor @ factor.T, matrix)
+            model = XGBoostModel(task="regression", device="cpu").fit(
+                features, labels, seed=seed, fit_threads=2
+            )
+            assert model.diagnostics["device"] == "cpu"
+            assert np.isfinite(model.predict(features)).all()
+        print("Torch linalg and repeated CPU XGBoost fits passed", flush=True)
+        """
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(Path(tabgen_eval.__file__).resolve().parents[1])
+    env["OMP_NUM_THREADS"] = "2"
+    env["OPENBLAS_NUM_THREADS"] = "2"
+    env.pop("KMP_DUPLICATE_LIB_OK", None)
+    result = subprocess.run(
+        [sys.executable, "-X", "faulthandler", "-c", script],
+        cwd=tmp_path,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=90,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "Torch linalg and repeated CPU XGBoost fits passed" in result.stdout
 
 
 @pytest.mark.parametrize(
