@@ -30,6 +30,8 @@ exclude_patterns = ["_build", "_generated", "Thumbs.db", ".DS_Store"]
 myst_enable_extensions = ["colon_fence", "dollarmath", "amsmath", "deflist"]
 myst_heading_anchors = 5
 myst_fence_as_directive = ["mermaid"]
+# The landing page has no H1 by design; its sections start at H2.
+suppress_warnings = ["myst.header"]
 html_theme = "sphinx_book_theme"
 html_title = "TabGenEval documentation"
 html_logo = "_static/tabgen-eval-table.svg"
