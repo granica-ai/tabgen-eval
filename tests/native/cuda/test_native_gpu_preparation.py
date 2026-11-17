@@ -1,7 +1,12 @@
 """Independent dense oracles for native compact GPU curvature preparation."""
 
+# Check the optional dependency before importing GPU helpers during collection.
+# ruff: noqa: E402
+
 import pytest
 import torch
+
+pytest.importorskip("triton")
 
 from tabgen_eval.execution.torch.cuda.classifier.data import Design
 from tabgen_eval.execution.torch.cuda.classifier.device import operators

@@ -1,6 +1,7 @@
 """Objective and state-transition oracles for the CUDA-only fitting guard."""
 
-# Optional torch installations skip this module before importing GPU helpers.
+# GPU helpers require Torch and Triton to import. These mocked tests still use
+# CPU tensors and need no CUDA device when those dependencies are installed.
 # ruff: noqa: E402
 
 from types import SimpleNamespace
@@ -9,6 +10,7 @@ import numpy as np
 import pytest
 
 torch = pytest.importorskip("torch")
+pytest.importorskip("triton")
 
 from tabgen_eval.execution.torch.cuda.classifier import saga
 from tabgen_eval.execution.torch.cuda.classifier.data import Design, Fold
