@@ -99,8 +99,12 @@ report.fidelity.plot(kind="columns", metric="shape").write_html("columns.html")
 report.utility.plot(kind="utility").write_html("utility.html")
 ```
 
-For more details on available metrics, uncertainty quantification options, and visualization capabilities, please refer to the [documentation](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/metrics/index.md).
+For more details on available metrics, uncertainty quantification options, and visualization capabilities, please refer to the [documentation](https://www.granica.ai/large-tabular-models/tabgen-eval/index.html).
 
+## Reporting Issues
+
+We welcome bug reports, feature requests, and suggestions for improving TabGenEval! If you encounter any issues, please [open a GitHub issue](https://github.com/granica-ai/tabgen-eval/issues/new).
+Your feedback helps us improve TabGenEval. Thank you for contributing!
 
 ## Citation
 If you use TabGenEval in your research, please cite our repository:
