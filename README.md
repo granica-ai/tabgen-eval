@@ -4,6 +4,12 @@
   <img src="https://raw.githubusercontent.com/granica-ai/tabgen-eval/main/docs/source/_static/holmes-inspecting-tables.png" alt="Holmes inspecting tables" width="640">
 </p>
 
+<p align="center">
+  <a href="https://www.granica.ai/large-tabular-models/tabgen-eval/index.html">
+    [🌐 Documentation]
+  </a>
+</p>
+
 TabGenEval is a comprehensive, high-performance evaluation framework for synthetic tabular data, using real data as the reference. It evaluates tabular generative models across three core pillars: Fidelity, Memorization, and Utility.
 
 TabGenEval offers four key capabilities: (1) comprehensive population- and subpopulation-level evaluation, (2) real-data references, (3) uncertainty quantification, and (4) high-performance large-scale computation.
@@ -41,7 +47,7 @@ pip install "tabgen-eval[cuda,xgboost-cuda]"
 Supported platforms are Linux (CPU and GPU) and Apple Silicon macOS (CPU only).
 Native CPU operators compile on first use and require a C++17-compatible compiler
 (C++20 for PyTorch ≥ 2.12) and OpenMP support. See the
-[installation guide](https://github.com/granica-ai/tabgen-eval/blob/main/docs/source/getting-started/installation.md)
+[installation guide](https://www.granica.ai/large-tabular-models/tabgen-eval/getting-started/installation.html)
 for compiler setup and source installation instructions.
 
 ## Quick Start
